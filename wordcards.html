@@ -104,27 +104,50 @@
             font-size: 8rem;
             margin: 20px 0;
             color: #073b4c;
+            min-height: 120px; /* 防止文字切换时布局跳动 */
         }
 
-        /* 图片容器样式 */
+        /* 图片容器和加载状态 */
         .image-container {
             margin: 20px 0;
+            min-height: 200px; /* 固定高度，避免加载时布局跳动 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .char-image {
             max-width: 250px;
             height: 200px;
-            object-fit: contain; /* 保持图片比例，不拉伸 */
+            object-fit: contain;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            background-color: #f9f9f9; /* 图片加载前显示浅灰背景 */
+            background-color: #f9f9f9;
             padding: 10px;
+            display: none; /* 初始隐藏，加载完成后显示 */
+        }
+
+        /* 加载动画样式 */
+        .loading {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #118ab2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none; /* 初始隐藏 */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .pinyin {
             font-size: 2rem;
             color: #ef476f;
             margin: 20px 0;
+            min-height: 40px; /* 防止拼音切换时布局跳动 */
         }
 
         .meaning {
@@ -132,6 +155,7 @@
             color: #555;
             margin-bottom: 30px;
             padding: 0 10px;
+            min-height: 60px; /* 防止释义切换时布局跳动 */
         }
 
         .controls {
@@ -139,7 +163,7 @@
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
-            flex-wrap: wrap; /* 适配小屏幕 */
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -178,9 +202,11 @@
         @media (max-width: 768px) {
             .hanzi {
                 font-size: 5rem;
+                min-height: 80px;
             }
             .pinyin {
                 font-size: 1.5rem;
+                min-height: 30px;
             }
             .interaction-prompt {
                 font-size: 1.2rem;
@@ -188,6 +214,9 @@
             .char-image {
                 max-width: 200px;
                 height: 180px;
+            }
+            .image-container {
+                min-height: 180px;
             }
         }
     </style>
@@ -207,17 +236,18 @@
     </div>
 
     <div class="card-container">
-        <div class="progress" id="progress">1 / 4</div>
+        <div class="progress" id="progress">1 / 8</div>
         
-        <div class="hanzi" id="hanzi">山</div>
+        <div class="hanzi" id="hanzi">苹果</div>
         
-        <!-- 图片显示区域 -->
+        <!-- 图片显示区域（含加载动画） -->
         <div class="image-container">
+            <div class="loading" id="loadingIcon"></div> <!-- 加载图标 -->
             <img src="" alt="Character image" id="charImage" class="char-image">
         </div>
         
-        <div class="pinyin" id="pinyin">shān</div>
-        <div class="meaning" id="meaning">Meaning: A high land formation (e.g., mountain)</div>
+        <div class="pinyin" id="pinyin">píng guǒ</div>
+        <div class="meaning" id="meaning">Meaning: Apple</div>
 
         <div class="controls">
             <button class="btn prev-btn" onclick="prevWord()">⬅️ Previous</button>
@@ -234,13 +264,24 @@
         const speechSynthesis = window.speechSynthesis;
         let isUserInteracted = false;
         const promptEl = document.getElementById('interactionPrompt');
+        // 获取DOM元素
+        const hanziEl = document.getElementById('hanzi');
+        const pinyinEl = document.getElementById('pinyin');
+        const meaningEl = document.getElementById('meaning');
+        const charImageEl = document.getElementById('charImage');
+        const loadingIconEl = document.getElementById('loadingIcon');
+        const progressEl = document.getElementById('progress');
 
         // 初始化：加载单词数据
         async function init() {
             try {
-                const wordResponse = await fetch('words_46.json');
+                // 显示加载状态
+                showLoading();
+                const wordResponse = await fetch('words.json');
                 words = await wordResponse.json();
-                updateCard(); // 加载完成后更新卡片
+                // 加载完成后更新卡片
+                updateCard();
+                hideLoading();
 
                 if (!speechSynthesis) {
                     document.getElementById('status').textContent = "Your browser does not support speech. Try Chrome/Edge.";
@@ -248,24 +289,36 @@
             } catch (error) {
                 console.error('Initialization failed:', error);
                 document.getElementById('status').textContent = "Error loading words. Check words.json file.";
-                // 显示错误图片
-                document.getElementById('charImage').src = "images/error.png"; // 可准备一张错误提示图
-                document.getElementById('charImage').alt = "Error loading data";
+                charImageEl.src = "images/error.png";
+                charImageEl.alt = "Error loading data";
+                charImageEl.style.display = "block";
+                hideLoading();
             }
         }
 
-        // 处理用户交互（统一入口）
+        // 显示加载状态
+        function showLoading() {
+            // 隐藏内容，显示加载图标
+            hanziEl.textContent = "";
+            pinyinEl.textContent = "";
+            meaningEl.textContent = "";
+            charImageEl.style.display = "none";
+            loadingIconEl.style.display = "block";
+        }
+
+        // 隐藏加载状态
+        function hideLoading() {
+            loadingIconEl.style.display = "none";
+        }
+
+        // 处理用户交互
         function handleUserInteraction() {
             isUserInteracted = true;
-            // 隐藏遮罩层
             promptEl.style.display = 'none';
             promptEl.style.opacity = '0';
             promptEl.style.zIndex = '-1';
-            // 允许页面滚动
             document.body.style.overflow = 'auto';
-            // 状态提示
             document.getElementById('status').textContent = "Sound enabled. Click 'Listen' to play.";
-            // 预加载语音引擎
             const preloadUtterance = new SpeechSynthesisUtterance(' ');
             speechSynthesis.speak(preloadUtterance);
         }
@@ -286,28 +339,42 @@
             updateCard();
         }
 
-        // 更新卡片内容（含图片、汉字、拼音等）
+        // 更新卡片内容（含加载状态管理）
         function updateCard() {
             if (words.length === 0) return;
             
             const word = words[currentIndex];
-            // 更新汉字
-            document.getElementById('hanzi').textContent = word.hanzi;
-            // 更新拼音
-            document.getElementById('pinyin').textContent = word.pinyin;
-            // 更新释义
-            document.getElementById('meaning').textContent = word.meaning;
-            // 更新进度
-            document.getElementById('progress').textContent = `${currentIndex + 1} / ${words.length}`;
-            // 更新图片（若图片路径存在）
-            if (word.image) {
-                document.getElementById('charImage').src = word.image;
-                document.getElementById('charImage').alt = `Image of ${word.hanzi}`;
-            } else {
-                // 若无图片，显示默认图标
-                document.getElementById('charImage').src = "images/default.png"; // 可准备一张默认图
-                document.getElementById('charImage').alt = "No image available";
-            }
+            // 显示加载状态
+            showLoading();
+
+            // 更新进度（进度不依赖加载，可立即更新）
+            progressEl.textContent = `${currentIndex + 1} / ${words.length}`;
+
+            // 预加载图片，确保加载完成后再显示
+            const img = new Image();
+            img.src = word.image;
+            img.onload = function() {
+                // 图片加载完成后更新所有内容
+                hanziEl.textContent = word.hanzi;
+                pinyinEl.textContent = word.pinyin;
+                meaningEl.textContent = word.meaning;
+                charImageEl.src = word.image;
+                charImageEl.alt = `Image of ${word.hanzi}`;
+                charImageEl.style.display = "block";
+                // 隐藏加载图标
+                hideLoading();
+            };
+
+            // 图片加载失败处理
+            img.onerror = function() {
+                hanziEl.textContent = word.hanzi;
+                pinyinEl.textContent = word.pinyin;
+                meaningEl.textContent = word.meaning;
+                charImageEl.src = "images/default.png"; // 显示默认图
+                charImageEl.alt = "Image not available";
+                charImageEl.style.display = "block";
+                hideLoading();
+            };
         }
 
         // 播放AI发音
@@ -325,20 +392,15 @@
             const currentWord = words[currentIndex];
             const statusEl = document.getElementById('status');
 
-            // 停止当前播放
             speechSynthesis.cancel();
-
-            // 配置语音参数
             const utterance = new SpeechSynthesisUtterance(currentWord.hanzi);
-            utterance.lang = 'zh-CN'; // 中文普通话
-            utterance.rate = 0.8; // 稍慢语速，适合学习
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.8;
             utterance.pitch = 1;
             utterance.volume = 1;
 
-            // 播放语音
             speechSynthesis.speak(utterance);
             
-            // 状态反馈
             utterance.onstart = () => {
                 statusEl.textContent = "Playing pronunciation...";
             };
