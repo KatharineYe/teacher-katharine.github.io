@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Flashcards - Happy Chinese Learning</title>
     <style>
-        /* 样式保持不变 */
+        /* 保持原有样式不变 */
         * {
             margin: 0;
             padding: 0;
@@ -16,8 +16,40 @@
         body {
             background-color: #eaf8ff;
             padding-bottom: 50px;
+            min-height: 100vh; /* 确保页面可点击区域足够大 */
         }
 
+        /* 新增：交互提示遮罩（首次加载时显示） */
+        .interaction-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .interaction-prompt button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #ef476f;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        /* 其他样式保持不变 */
         .header {
             background-color: #118ab2;
             padding: 20px;
@@ -114,6 +146,12 @@
             font-size: 1rem;
         }
 
+        .status {
+            color: #118ab2;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .hanzi {
                 font-size: 5rem;
@@ -121,18 +159,26 @@
             .pinyin {
                 font-size: 1.5rem;
             }
+            .interaction-prompt {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 新增：首次加载时显示的交互提示遮罩 -->
+    <div class="interaction-prompt" id="interactionPrompt">
+        <p>Welcome! Please click below to enable sound</p>
+        <button onclick="enableSound()">Enable Sound</button>
+    </div>
+
     <div class="header">
         <a href="index.html" class="back-btn">← Back to Home</a>
         <h1>Character Flashcards 📇</h1>
-        <p>Click "Listen" to hear pronunciation, navigate with arrows</p>
+        <p>Click "Listen" to hear pronunciation</p>
     </div>
 
     <div class="card-container">
-        <!-- 进度提示（新增） -->
         <div class="progress" id="progress">1 / 5</div>
         
         <div class="hanzi" id="hanzi">山</div>
@@ -144,32 +190,45 @@
             <button class="btn sound-btn" onclick="playSound()">🔊 Listen</button>
             <button class="btn next-btn" onclick="nextWord()">➡️ Next</button>
         </div>
+
+        <div class="status" id="status"></div>
     </div>
 
     <script>
-        let words = []; // 存储从JSON加载的单词数据
+        let words = [];
         let currentIndex = 0;
+        const speechSynthesis = window.speechSynthesis;
+        let isUserInteracted = false; // 标记用户是否已交互
 
-        // 初始化：从words.json加载数据
+        // 初始化：加载单词数据
         async function init() {
             try {
-                // 动态加载JSON文件
-                const response = await fetch('words.json');
-                words = await response.json();
-                
-                // 加载成功后更新卡片
+                const wordResponse = await fetch('words.json');
+                words = await wordResponse.json();
                 updateCard();
+
+                if (!speechSynthesis) {
+                    document.getElementById('status').textContent = "Your browser does not support speech. Try Chrome/Edge.";
+                }
             } catch (error) {
-                console.error('Failed to load words:', error);
-                document.getElementById('meaning').textContent = "Error loading words. Please check the file.";
+                console.error('Initialization failed:', error);
+                document.getElementById('status').textContent = "Error loading words";
             }
         }
 
-        // 上一个单词（新增功能）
+        // 新增：用户点击"Enable Sound"后触发，标记为已交互
+        function enableSound() {
+            isUserInteracted = true;
+            document.getElementById('interactionPrompt').style.display = 'none'; // 隐藏遮罩
+            document.getElementById('status').textContent = "Sound enabled. Click 'Listen' to play.";
+        }
+
+        // 上一个单词
         function prevWord() {
             if (words.length === 0) return;
             currentIndex = (currentIndex - 1 + words.length) % words.length;
             updateCard();
+            isUserInteracted = true; // 点击按钮也算交互
         }
 
         // 下一个单词
@@ -177,9 +236,10 @@
             if (words.length === 0) return;
             currentIndex = (currentIndex + 1) % words.length;
             updateCard();
+            isUserInteracted = true; // 点击按钮也算交互
         }
 
-        // 更新卡片内容（包含进度显示）
+        // 更新卡片内容
         function updateCard() {
             if (words.length === 0) return;
             
@@ -187,22 +247,54 @@
             document.getElementById('hanzi').textContent = word.hanzi;
             document.getElementById('pinyin').textContent = word.pinyin;
             document.getElementById('meaning').textContent = word.meaning;
-            // 显示进度（当前/总数）
             document.getElementById('progress').textContent = `${currentIndex + 1} / ${words.length}`;
         }
 
-        // 播放读音
+        // 播放发音（优化版：先检查用户是否已交互）
         function playSound() {
-            if (words.length === 0) return;
-            
-            const audio = new Audio(words[currentIndex].sound);
-            audio.play().catch(err => {
+            if (!speechSynthesis) {
+                alert("Your browser does not support speech. Please use Chrome, Edge, or Safari.");
+                return;
+            }
+
+            // 如果用户尚未交互，提示先点击页面
+            if (!isUserInteracted) {
                 alert("Please click anywhere on the page first, then try playing sound!");
-            });
+                return;
+            }
+
+            const currentWord = words[currentIndex];
+            const statusEl = document.getElementById('status');
+
+            speechSynthesis.cancel(); // 停止正在播放的语音
+
+            const utterance = new SpeechSynthesisUtterance(currentWord.hanzi);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.8;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+
+            speechSynthesis.speak(utterance);
+            
+            utterance.onstart = () => {
+                statusEl.textContent = "Playing sound...";
+            };
+            utterance.onend = () => {
+                statusEl.textContent = "Sound played";
+            };
+            utterance.onerror = (event) => {
+                statusEl.textContent = "Failed to play sound. Try again.";
+            };
         }
 
         // 页面加载时初始化
         window.onload = init;
+
+        // 额外保险：点击页面任意位置都算交互
+        document.addEventListener('click', () => {
+            isUserInteracted = true;
+            document.getElementById('interactionPrompt').style.display = 'none';
+        });
     </script>
 </body>
 </html>
