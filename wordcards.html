@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Flashcards - Happy Chinese Learning</title>
     <style>
-        /* 保持原有样式不变 */
+        /* 保持原有样式，强化遮罩层显示 */
         * {
             margin: 0;
             padding: 0;
@@ -16,30 +16,32 @@
         body {
             background-color: #eaf8ff;
             padding-bottom: 50px;
-            min-height: 100vh; /* 确保页面可点击区域足够大 */
+            min-height: 100vh;
+            overflow: hidden; /* 遮罩显示时禁止页面滚动 */
         }
 
-        /* 新增：交互提示遮罩（首次加载时显示） */
+        /* 强化遮罩层样式，确保覆盖全屏 */
         .interaction-prompt {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.8);
             color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 9999; /* 最高层级，确保覆盖所有内容 */
             font-size: 1.5rem;
             text-align: center;
             padding: 20px;
+            transition: opacity 0.3s;
         }
 
         .interaction-prompt button {
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 15px 30px;
             font-size: 1.2rem;
             background-color: #ef476f;
@@ -47,6 +49,12 @@
             border: none;
             border-radius: 30px;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .interaction-prompt button:hover {
+            transform: scale(1.1);
         }
 
         /* 其他样式保持不变 */
@@ -166,10 +174,11 @@
     </style>
 </head>
 <body>
-    <!-- 新增：首次加载时显示的交互提示遮罩 -->
+    <!-- 交互提示遮罩 -->
     <div class="interaction-prompt" id="interactionPrompt">
-        <p>Welcome! Please click below to enable sound</p>
-        <button onclick="enableSound()">Enable Sound</button>
+        <p>Welcome to Chinese Flashcards!</p>
+        <p>Please click the button below to enable sound</p>
+        <button onclick="handleUserInteraction()">Enable Sound & Continue</button>
     </div>
 
     <div class="header">
@@ -198,9 +207,10 @@
         let words = [];
         let currentIndex = 0;
         const speechSynthesis = window.speechSynthesis;
-        let isUserInteracted = false; // 标记用户是否已交互
+        let isUserInteracted = false;
+        const promptEl = document.getElementById('interactionPrompt');
 
-        // 初始化：加载单词数据
+        // 初始化
         async function init() {
             try {
                 const wordResponse = await fetch('words.json');
@@ -216,27 +226,37 @@
             }
         }
 
-        // 新增：用户点击"Enable Sound"后触发，标记为已交互
-        function enableSound() {
+        // 核心：处理用户交互（统一入口）
+        function handleUserInteraction() {
+            // 强制标记为已交互
             isUserInteracted = true;
-            document.getElementById('interactionPrompt').style.display = 'none'; // 隐藏遮罩
+            // 隐藏遮罩层（多种方式确保生效）
+            promptEl.style.display = 'none';
+            promptEl.style.opacity = '0';
+            promptEl.style.zIndex = '-1';
+            // 允许页面滚动
+            document.body.style.overflow = 'auto';
+            // 状态提示
             document.getElementById('status').textContent = "Sound enabled. Click 'Listen' to play.";
+            // 触发一次空的语音播放（预加载语音引擎，避免首次播放延迟）
+            const preloadUtterance = new SpeechSynthesisUtterance(' ');
+            speechSynthesis.speak(preloadUtterance);
         }
 
         // 上一个单词
         function prevWord() {
+            handleUserInteraction(); // 点击按钮即视为交互
             if (words.length === 0) return;
             currentIndex = (currentIndex - 1 + words.length) % words.length;
             updateCard();
-            isUserInteracted = true; // 点击按钮也算交互
         }
 
         // 下一个单词
         function nextWord() {
+            handleUserInteraction(); // 点击按钮即视为交互
             if (words.length === 0) return;
             currentIndex = (currentIndex + 1) % words.length;
             updateCard();
-            isUserInteracted = true; // 点击按钮也算交互
         }
 
         // 更新卡片内容
@@ -250,23 +270,23 @@
             document.getElementById('progress').textContent = `${currentIndex + 1} / ${words.length}`;
         }
 
-        // 播放发音（优化版：先检查用户是否已交互）
+        // 播放发音
         function playSound() {
             if (!speechSynthesis) {
                 alert("Your browser does not support speech. Please use Chrome, Edge, or Safari.");
                 return;
             }
 
-            // 如果用户尚未交互，提示先点击页面
+            // 严格检查交互状态
             if (!isUserInteracted) {
-                alert("Please click anywhere on the page first, then try playing sound!");
+                alert("Please click the 'Enable Sound & Continue' button first!");
                 return;
             }
 
             const currentWord = words[currentIndex];
             const statusEl = document.getElementById('status');
 
-            speechSynthesis.cancel(); // 停止正在播放的语音
+            speechSynthesis.cancel();
 
             const utterance = new SpeechSynthesisUtterance(currentWord.hanzi);
             utterance.lang = 'zh-CN';
@@ -290,10 +310,11 @@
         // 页面加载时初始化
         window.onload = init;
 
-        // 额外保险：点击页面任意位置都算交互
-        document.addEventListener('click', () => {
-            isUserInteracted = true;
-            document.getElementById('interactionPrompt').style.display = 'none';
+        // 额外保障：点击页面任何地方都触发交互（除了遮罩层本身）
+        document.addEventListener('click', (e) => {
+            if (e.target !== promptEl && e.target.parentElement !== promptEl) {
+                handleUserInteraction();
+            }
         });
     </script>
 </body>
