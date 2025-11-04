@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Games - Happy Chinese Learning</title>
+    <style>
+        /* 样式保持不变 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Comic Sans MS", "Marker Felt", sans-serif;
+        }
+
+        body {
+            background-color: #e6fff0;
+            padding-bottom: 50px;
+        }
+
+        .header {
+            background-color: #06d6a0;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 8px solid #ffd166;
+        }
+
+        .header h1 {
+            color: white;
+            text-shadow: 2px 2px 0 #073b4c;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background-color: white;
+            color: #06d6a0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .game-title {
+            text-align: center;
+            color: #073b4c;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .matching-game {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border: 6px solid #06d6a0;
+        }
+
+        .game-desc {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .match-card {
+            background-color: #f8f9fa;
+            border: 4px solid #118ab2;
+            border-radius: 10px;
+            padding: 20px 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .match-card:hover {
+            transform: scale(1.05);
+            background-color: #eaf8ff;
+        }
+
+        .match-card.selected {
+            background-color: #ffd166;
+            border-color: #ef476f;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            min-height: 30px;
+        }
+
+        .correct {
+            color: #06d6a0;
+            font-weight: bold;
+        }
+
+        .wrong {
+            color: #ef476f;
+            font-weight: bold;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 0 auto;
+            background-color: #ef476f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .reset-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        <h1>Fun Games 🎮</h1>
+        <p>Learn Chinese while playing – it's easier and more fun!</p>
+    </div>
+
+    <div class="game-container">
+        <h2 class="game-title">Character-Pinyin Matching</h2>
+
+        <div class="matching-game">
+            <p class="game-desc">Click to select one character and one pinyin. Match them correctly to score!</p>
+
+            <div class="matching-grid">
+                <!-- 汉字卡片（保持不变） -->
+                <div class="match-card" data-type="hanzi" data-value="山">山</div>
+                <div class="match-card" data-type="hanzi" data-value="水">水</div>
+                <div class="match-card" data-type="hanzi" data-value="日">日</div>
+                <div class="match-card" data-type="hanzi" data-value="月">月</div>
+
+                <!-- 拼音卡片（保持不变） -->
+                <div class="match-card" data-type="pinyin" data-value="山">shān</div>
+                <div class="match-card" data-type="pinyin" data-value="水">shuǐ</div>
+                <div class="match-card" data-type="pinyin" data-value="日">rì</div>
+                <div class="match-card" data-type="pinyin" data-value="月">yuè</div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+            <button class="reset-btn" onclick="resetGame()">Restart Game</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedCards = [];
+
+        document.querySelectorAll('.match-card').forEach(card => {
+            card.addEventListener('click', () => selectCard(card));
+        });
+
+        function selectCard(card) {
+            if (selectedCards.length >= 2 || selectedCards.includes(card)) return;
+
+            card.classList.add('selected');
+            selectedCards.push(card);
+
+            if (selectedCards.length === 2) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const card1 = selectedCards[0];
+            const card2 = selectedCards[1];
+            const feedback = document.getElementById('feedback');
+
+            if (
+                card1.dataset.type !== card2.dataset.type && 
+                card1.dataset.value === card2.dataset.value
+            ) {
+                feedback.textContent = "Awesome, correct match! 🎉";
+                feedback.className = "feedback correct";
+                card1.style.cursor = "default";
+                card2.style.cursor = "default";
+                card1.removeEventListener('click', () => selectCard(card1));
+                card2.removeEventListener('click', () => selectCard(card2));
+            } else {
+                feedback.textContent = "Try again! 😉";
+                feedback.className = "feedback wrong";
+                setTimeout(() => {
+                    card1.classList.remove('selected');
+                    card2.classList.remove('selected');
+                }, 1000);
+            }
+
+            setTimeout(() => {
+                selectedCards = [];
+            }, 1000);
+        }
+
+        function resetGame() {
+            document.querySelectorAll('.match-card').forEach(card => {
+                card.classList.remove('selected');
+                card.style.cursor = "pointer";
+                card.addEventListener('click', () => selectCard(card));
+            });
+            document.getElementById('feedback').textContent = "";
+            selectedCards = [];
+        }
+    </script>
+</body>
+</html>

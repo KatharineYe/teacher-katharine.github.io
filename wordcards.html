@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Flashcards - Happy Chinese Learning</title>
+    <style>
+        /* 样式保持不变 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Comic Sans MS", "Marker Felt", sans-serif;
+        }
+
+        body {
+            background-color: #eaf8ff;
+            padding-bottom: 50px;
+        }
+
+        .header {
+            background-color: #118ab2;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 8px solid #ffd166;
+        }
+
+        .header h1 {
+            color: white;
+            text-shadow: 2px 2px 0 #073b4c;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background-color: white;
+            color: #118ab2;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .card-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border: 6px solid #118ab2;
+        }
+
+        .hanzi {
+            font-size: 8rem;
+            margin: 30px 0;
+            color: #073b4c;
+        }
+
+        .pinyin {
+            font-size: 2rem;
+            color: #ef476f;
+            margin-bottom: 20px;
+        }
+
+        .meaning {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .sound-btn {
+            background-color: #ef476f;
+        }
+
+        .next-btn {
+            background-color: #06d6a0;
+        }
+
+        @media (max-width: 768px) {
+            .hanzi {
+                font-size: 5rem;
+            }
+            .pinyin {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        <h1>Character Flashcards 📇</h1>
+        <p>Click "Listen" to hear pronunciation, "Next" to change character</p>
+    </div>
+
+    <div class="card-container">
+        <div class="hanzi" id="hanzi">山</div>
+        <div class="pinyin" id="pinyin">shān</div>
+        <div class="meaning" id="meaning">Meaning: A high land formation (e.g., mountain)</div>
+
+        <div class="controls">
+            <button class="btn sound-btn" onclick="playSound()">🔊 Listen</button>
+            <button class="btn next-btn" onclick="nextWord()">➡️ Next</button>
+        </div>
+    </div>
+
+    <script>
+        // 汉字数据（英文释义）
+        const words = [
+            {
+                hanzi: "山",
+                pinyin: "shān",
+                meaning: "Meaning: A high land formation (e.g., mountain)",
+                sound: "https://www.example.com/sounds/shan.mp3"
+            },
+            {
+                hanzi: "水",
+                pinyin: "shuǐ",
+                meaning: "Meaning: A colorless, odorless liquid (e.g., river water)",
+                sound: "https://www.example.com/sounds/shui.mp3"
+            },
+            {
+                hanzi: "日",
+                pinyin: "rì",
+                meaning: "Meaning: The sun (e.g., sunrise)",
+                sound: "https://www.example.com/sounds/ri.mp3"
+            },
+            {
+                hanzi: "月",
+                pinyin: "yuè",
+                meaning: "Meaning: The moon (e.g., full moon)",
+                sound: "https://www.example.com/sounds/yue.mp3"
+            }
+        ];
+
+        let currentIndex = 0;
+
+        function nextWord() {
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        }
+
+        function updateCard() {
+            const word = words[currentIndex];
+            document.getElementById("hanzi").textContent = word.hanzi;
+            document.getElementById("pinyin").textContent = word.pinyin;
+            document.getElementById("meaning").textContent = word.meaning;
+        }
+
+        function playSound() {
+            const audio = new Audio(words[currentIndex].sound);
+            audio.play().catch(err => {
+                alert("Please click anywhere on the page first, then try playing sound!");
+            });
+        }
+    </script>
+</body>
+</html>

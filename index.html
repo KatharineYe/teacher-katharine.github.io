@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Chinese Learning System</title>
+    <style>
+        /* 样式保持不变 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Comic Sans MS", "Marker Felt", sans-serif;
+        }
+
+        body {
+            background-color: #fff9e6;
+            background-image: 
+                radial-gradient(#ffd166 2px, transparent 2px),
+                radial-gradient(#06d6a0 2px, transparent 2px);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: #ef476f;
+            border-bottom: 8px solid #ffd166;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 3px 3px 0 #073b4c;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 300px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border: 5px solid;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .card.wordcards {
+            border-color: #118ab2;
+        }
+
+        .card.games {
+            border-color: #06d6a0;
+        }
+
+        .card-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #073b4c;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .card p {
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #ef476f;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .card.wordcards .btn {
+            background-color: #118ab2;
+        }
+
+        .card.games .btn {
+            background-color: #06d6a0;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            text-align: center;
+            margin: 60px 0 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Happy Chinese Learning 🎈</h1>
+        <p>Learn Chinese characters through fun activities!</p>
+    </div>
+
+    <div class="container">
+        <!-- 单词卡卡片 -->
+        <div class="card wordcards">
+            <div class="card-icon">📇</div>
+            <h2>Character Flashcards</h2>
+            <p>Learn characters, pinyin, pronunciation, and stroke order animations!</p>
+            <a href="wordcards.html" class="btn">Start Learning →</a>
+        </div>
+
+        <!-- 小游戏卡片 -->
+        <div class="card games">
+            <div class="card-icon">🎮</div>
+            <h2>Fun Games</h2>
+            <p>Reinforce your skills with matching and quizzes – learn while playing!</p>
+            <a href="games.html" class="btn">Start Playing →</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        Happy Chinese Learning System © 2023 | Making learning fun!
+    </div>
+</body>
+</html>
