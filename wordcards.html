@@ -100,8 +100,18 @@
             background-color: #ef476f;
         }
 
+        .prev-btn {
+            background-color: #118ab2;
+        }
+
         .next-btn {
             background-color: #06d6a0;
+        }
+
+        .progress {
+            margin: 20px 0;
+            color: #666;
+            font-size: 1rem;
         }
 
         @media (max-width: 768px) {
@@ -118,69 +128,81 @@
     <div class="header">
         <a href="index.html" class="back-btn">← Back to Home</a>
         <h1>Character Flashcards 📇</h1>
-        <p>Click "Listen" to hear pronunciation, "Next" to change character</p>
+        <p>Click "Listen" to hear pronunciation, navigate with arrows</p>
     </div>
 
     <div class="card-container">
+        <!-- 进度提示（新增） -->
+        <div class="progress" id="progress">1 / 5</div>
+        
         <div class="hanzi" id="hanzi">山</div>
         <div class="pinyin" id="pinyin">shān</div>
         <div class="meaning" id="meaning">Meaning: A high land formation (e.g., mountain)</div>
 
         <div class="controls">
+            <button class="btn prev-btn" onclick="prevWord()">⬅️ Previous</button>
             <button class="btn sound-btn" onclick="playSound()">🔊 Listen</button>
             <button class="btn next-btn" onclick="nextWord()">➡️ Next</button>
         </div>
     </div>
 
     <script>
-        // 汉字数据（英文释义）
-        const words = [
-            {
-                hanzi: "山",
-                pinyin: "shān",
-                meaning: "Meaning: A high land formation (e.g., mountain)",
-                sound: "https://www.example.com/sounds/shan.mp3"
-            },
-            {
-                hanzi: "水",
-                pinyin: "shuǐ",
-                meaning: "Meaning: A colorless, odorless liquid (e.g., river water)",
-                sound: "https://www.example.com/sounds/shui.mp3"
-            },
-            {
-                hanzi: "日",
-                pinyin: "rì",
-                meaning: "Meaning: The sun (e.g., sunrise)",
-                sound: "https://www.example.com/sounds/ri.mp3"
-            },
-            {
-                hanzi: "月",
-                pinyin: "yuè",
-                meaning: "Meaning: The moon (e.g., full moon)",
-                sound: "https://www.example.com/sounds/yue.mp3"
-            }
-        ];
-
+        let words = []; // 存储从JSON加载的单词数据
         let currentIndex = 0;
 
+        // 初始化：从words.json加载数据
+        async function init() {
+            try {
+                // 动态加载JSON文件
+                const response = await fetch('words.json');
+                words = await response.json();
+                
+                // 加载成功后更新卡片
+                updateCard();
+            } catch (error) {
+                console.error('Failed to load words:', error);
+                document.getElementById('meaning').textContent = "Error loading words. Please check the file.";
+            }
+        }
+
+        // 上一个单词（新增功能）
+        function prevWord() {
+            if (words.length === 0) return;
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        }
+
+        // 下一个单词
         function nextWord() {
+            if (words.length === 0) return;
             currentIndex = (currentIndex + 1) % words.length;
             updateCard();
         }
 
+        // 更新卡片内容（包含进度显示）
         function updateCard() {
+            if (words.length === 0) return;
+            
             const word = words[currentIndex];
-            document.getElementById("hanzi").textContent = word.hanzi;
-            document.getElementById("pinyin").textContent = word.pinyin;
-            document.getElementById("meaning").textContent = word.meaning;
+            document.getElementById('hanzi').textContent = word.hanzi;
+            document.getElementById('pinyin').textContent = word.pinyin;
+            document.getElementById('meaning').textContent = word.meaning;
+            // 显示进度（当前/总数）
+            document.getElementById('progress').textContent = `${currentIndex + 1} / ${words.length}`;
         }
 
+        // 播放读音
         function playSound() {
+            if (words.length === 0) return;
+            
             const audio = new Audio(words[currentIndex].sound);
             audio.play().catch(err => {
                 alert("Please click anywhere on the page first, then try playing sound!");
             });
         }
+
+        // 页面加载时初始化
+        window.onload = init;
     </script>
 </body>
 </html>

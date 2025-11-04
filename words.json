@@ -1,0 +1,32 @@
+[
+    {
+        "hanzi": "山",
+        "pinyin": "shān",
+        "meaning": "Meaning: A high land formation (e.g., mountain)",
+        "sound": "https://www.example.com/sounds/shan.mp3"
+    },
+    {
+        "hanzi": "水",
+        "pinyin": "shuǐ",
+        "meaning": "Meaning: A colorless, odorless liquid (e.g., river water)",
+        "sound": "https://www.example.com/sounds/shui.mp3"
+    },
+    {
+        "hanzi": "日",
+        "pinyin": "rì",
+        "meaning": "Meaning: The sun (e.g., sunrise)",
+        "sound": "https://www.example.com/sounds/ri.mp3"
+    },
+    {
+        "hanzi": "月",
+        "pinyin": "yuè",
+        "meaning": "Meaning: The moon (e.g., full moon)",
+        "sound": "https://www.example.com/sounds/yue.mp3"
+    },
+    {
+        "hanzi": "人",
+        "pinyin": "rén",
+        "meaning": "Meaning: A human being (e.g., person)",
+        "sound": "https://www.example.com/sounds/ren.mp3"
+    }
+]
