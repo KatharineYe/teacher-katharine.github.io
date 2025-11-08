@@ -296,7 +296,7 @@
         let currentIndex = 0;
         const speechSynthesis = window.speechSynthesis;
         let isUserInteracted = false;
-        const dFile = 'data/words_47.json';
+        let dFile = 'data/words.json'; // 默认文件
         const promptEl = document.getElementById('interactionPrompt');
         // 获取DOM元素
         const hanziEl = document.getElementById('hanzi');
@@ -306,11 +306,38 @@
         const loadingIconEl = document.getElementById('loadingIcon');
         const progressEl = document.getElementById('progress');
 
+        // 检测并获取最大序号的JSON文件
+        async function getLatestWordFile() {
+            // 可能的序号范围，可根据实际情况调整
+            const maxPossibleNumber = 100;
+            let latestNumber = 0;
+            
+            // 从大到小检查文件是否存在
+            for (let i = maxPossibleNumber; i >= 1; i--) {
+                const testFile = `data/words_${i}.json`;
+                try {
+                    const response = await fetch(testFile, { method: 'HEAD' });
+                    if (response.ok) {
+                        latestNumber = i;
+                        break; // 找到最大的序号就退出循环
+                    }
+                } catch (err) {
+                    // 文件不存在时的错误忽略
+                    continue;
+                }
+            }
+            
+            // 返回最新的文件路径
+            return latestNumber > 0 ? `data/words_${latestNumber}.json` : 'data/words.json';
+        }
+
         // 初始化：加载单词数据
         async function init() {
             try {
                 // 显示加载状态
                 showLoading();
+                // 获取最新的词汇文件
+                dFile = await getLatestWordFile();
                 const wordResponse = await fetch(dFile);
                 words = await wordResponse.json();
                 // 加载完成后更新卡片

@@ -148,8 +148,33 @@
         let maleVoice = null; // 男性声音
         let vocabulary = [];  // 从JSON加载的词汇数据
         let distractors = []; // 从JSON加载的迷惑项
-        const vocabularyFile = 'data/words_47.json';
+        let dFile = 'data/words.json'; // 默认文件
         const distractorsFile = 'data/distractors.json'; // 迷惑项JSON文件
+        
+        // 检测并获取最大序号的JSON文件
+        async function getLatestWordFile() {
+            // 可能的序号范围，可根据实际情况调整
+            const maxPossibleNumber = 100;
+            let latestNumber = 0;
+            
+            // 从大到小检查文件是否存在
+            for (let i = maxPossibleNumber; i >= 1; i--) {
+                const testFile = `data/words_${i}.json`;
+                try {
+                    const response = await fetch(testFile, { method: 'HEAD' });
+                    if (response.ok) {
+                        latestNumber = i;
+                        break; // 找到最大的序号就退出循环
+                    }
+                } catch (err) {
+                    // 文件不存在时的错误忽略
+                    continue;
+                }
+            }
+            
+            // 返回最新的文件路径
+            return latestNumber > 0 ? `data/words_${latestNumber}.json` : 'data/words.json';
+        }
         
         // DOM元素
         const playBtn = document.getElementById('playBtn');
@@ -173,9 +198,12 @@
                 gameOverModal.classList.add('hidden');
                 optionsEl.innerHTML = '';
                 
+                // 获取最新的词汇文件
+                dFile = await getLatestWordFile();
+                
                 // 并行加载词汇数据和迷惑项
                 const [vocabResponse, distractorsResponse] = await Promise.all([
-                    fetch(vocabularyFile),
+                    fetch(dFile),
                     fetch(distractorsFile)
                 ]);
                 
