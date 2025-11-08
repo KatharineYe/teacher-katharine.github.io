@@ -61,6 +61,7 @@
             padding: 20px;
             text-align: center;
             border-bottom: 8px solid #ffd166;
+            position: relative; /* 新增：使子元素可绝对定位 */
         }
 
         .header h1 {
@@ -81,6 +82,31 @@
             font-weight: bold;
             text-decoration: none;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 右上角复习按钮样式 */
+        .review-btn-header {
+            position: absolute;
+            right: 20px; /* 右侧定位，与左侧back-btn形成镜像 */
+            top: 20px;
+            background-color: #ffd166;
+            color: #073b4c;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .review-btn-header:hover {
+            transform: scale(1.05);
         }
 
         .card-container {
@@ -218,6 +244,11 @@
             .image-container {
                 min-height: 180px;
             }
+            /* 移动端调整按钮大小 */
+            .back-btn, .review-btn-header {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -231,6 +262,8 @@
 
     <div class="header">
         <a href="index.html" class="back-btn">← Back to Home</a>
+        <!-- 右上角复习按钮 -->
+        <button class="review-btn-header" onclick="goToReview()">Review 🔍</button>
         <h1>Character Flashcards 📇</h1>
         <p>Learn Chinese words with images and pronunciation</p>
     </div>
@@ -263,6 +296,7 @@
         let currentIndex = 0;
         const speechSynthesis = window.speechSynthesis;
         let isUserInteracted = false;
+        const dFile = 'data/words_47.json';
         const promptEl = document.getElementById('interactionPrompt');
         // 获取DOM元素
         const hanziEl = document.getElementById('hanzi');
@@ -277,7 +311,7 @@
             try {
                 // 显示加载状态
                 showLoading();
-                const wordResponse = await fetch('data/words_47.json');
+                const wordResponse = await fetch(dFile);
                 words = await wordResponse.json();
                 // 加载完成后更新卡片
                 updateCard();
@@ -337,6 +371,12 @@
             if (words.length === 0) return;
             currentIndex = (currentIndex + 1) % words.length;
             updateCard();
+        }
+
+        // 跳转到复习页面
+        function goToReview() {
+            handleUserInteraction();
+            window.location.href = 'review.html';
         }
 
         // 更新卡片内容（含加载状态管理）
