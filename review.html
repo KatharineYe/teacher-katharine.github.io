@@ -128,9 +128,12 @@
             </div>
             <h2 class="text-2xl font-bold text-primary text-center mb-2">Great Job!</h2>
             <p class="text-center text-neutral mb-6">Your final score: <span id="finalScore" class="font-bold text-primary text-2xl">0</span></p>
-            <div class="flex justify-center">
+            <div class="flex flex-col justify-center gap-3">
                 <button id="restartBtn" class="bg-gradient-to-r from-secondary to-accent2 hover:opacity-90 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all duration-300 text-lg wiggle">
                     Play Again
+                </button>
+                <button id="goBackBtn" class="bg-gradient-to-r from-primary to-accent3 hover:opacity-90 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all duration-300 text-lg wiggle">
+                    Go Back to Word Cards
                 </button>
             </div>
         </div>
@@ -144,7 +147,9 @@
         let currentWordData = null;
         let maleVoice = null; // 男性声音
         let vocabulary = [];  // 从JSON加载的词汇数据
-        const dFile = 'data/words_47.json';
+        let distractors = []; // 从JSON加载的迷惑项
+        const vocabularyFile = 'data/words_47.json';
+        const distractorsFile = 'data/distractors.json'; // 迷惑项JSON文件
         
         // DOM元素
         const playBtn = document.getElementById('playBtn');
@@ -155,6 +160,7 @@
         const finalScoreEl = document.getElementById('finalScore');
         const restartBtn = document.getElementById('restartBtn');
         const backBtn = document.getElementById('backBtn');
+        const goBackBtn = document.getElementById('goBackBtn'); // 新增的返回按钮
         
         // 初始化游戏
         async function initGame() {
@@ -167,27 +173,20 @@
                 gameOverModal.classList.add('hidden');
                 optionsEl.innerHTML = '';
                 
-                // 从JSON文件加载词汇数据
-                const response = await fetch(dFile);
-                if (!response.ok) throw new Error('Failed to load vocabulary data');
+                // 并行加载词汇数据和迷惑项
+                const [vocabResponse, distractorsResponse] = await Promise.all([
+                    fetch(vocabularyFile),
+                    fetch(distractorsFile)
+                ]);
                 
-                vocabulary = await response.json();
+                if (!vocabResponse.ok) throw new Error('Failed to load vocabulary data');
+                if (!distractorsResponse.ok) throw new Error('Failed to load distractors data');
+                
+                vocabulary = await vocabResponse.json();
+                distractors = await distractorsResponse.json();
+                
                 if (!vocabulary || vocabulary.length === 0) throw new Error('No vocabulary data available');
-                
-                // 迷惑项保持不变
-                const distractors = [
-                    { "english": "chili", "image": "https://hellorfimg.zcool.cn/large/2187570671.jpg" },
-                    { "english": "milk", "image": "https://img2.baidu.com/it/u=1994676893,3470999395&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400" },
-                    { "english": "banana", "image": "https://imgs.aixifan.com/newUpload/76686298_fa9cd63763e343a7a7b528f5561e4f7d.jpeg?w=400&h=400" },
-                    { "english": "ice cream", "image": "https://c-ssl.dtstatic.com/uploads/item/201608/10/20160810211351_SrMya.thumb.400_0.jpeg?w=400&h=400" },
-                    { "english": "yogurt", "image": "https://img0.baidu.com/it/u=2495496820,879090403&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400" },
-                    { "english": "juice", "image": "https://gd-hbimg.huaban.com/fb58bc702448790dee658b2d2ee27289466287f7e87f-MNVSMg_fw658?w=400&h=400" },
-                    { "english": "strawberry", "image": "https://img2.baidu.com/it/u=3200629007,96506358&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400" },
-                    { "english": "bread", "image": "https://imgservice.suning.cn/uimg1/b2c/image/l4PtvBZNnrJ9faWykSAPhA.jpg_800w_800h_4e?w=400&h=400" },
-                    { "english": "potato", "image": "https://img0.baidu.com/it/u=2814997083,1919246651&fm=253&fmt=auto&app=138&f=PNG?w=400&h=400" },
-                    { "english": "orange", "image": "https://www.i1766.com/zb_users/upload/2022/12/202212061670310614443963.jpg?w=400&h=400" },
-                    { "english": "coffee", "image": "https://qcloud.dpfile.com/pc/7ZNMjG0HKqPBp06bSA5lVaZnfa4xWFR9DiRHS27HQFgSOKdENvCT5IYH0G2v-PZo.jpg?w=400&h=400" }
-                ];
+                if (!distractors || distractors.length === 0) throw new Error('No distractors data available');
                 
                 // 更新进度显示
                 progressEl.textContent = `0/${vocabulary.length}`;
@@ -197,7 +196,7 @@
                 prepareMaleVoice();
                 
                 // 加载第一个词语
-                loadNextWord(vocabulary, distractors);
+                loadNextWord();
                 
             } catch (error) {
                 console.error('Initialization error:', error);
@@ -222,7 +221,7 @@
         }
         
         // 加载下一个词语
-        function loadNextWord(vocabulary, distractors) {
+        function loadNextWord() {
             if (currentWordIndex >= vocabulary.length) {
                 endGame(vocabulary.length);
                 return;
@@ -238,7 +237,7 @@
             currentWordData = vocabulary[randomIndex];
             
             // 生成选项（仅显示英文）
-            generateOptions(currentWordData, distractors);
+            generateOptions(currentWordData);
             
             // 更新进度
             currentWordIndex++;
@@ -246,7 +245,7 @@
         }
         
         // 生成选项（增大尺寸的两列布局）
-        function generateOptions(currentWord, distractors) {
+        function generateOptions(currentWord) {
             optionsEl.innerHTML = '';
             
             // 从meaning中提取英文部分（去除"Meaning: "前缀）
@@ -319,19 +318,7 @@
             
             // 延迟加载下一个词语
             setTimeout(() => {
-                loadNextWord(vocabulary, [
-                    { "english": "chili", "image": "https://hellorfimg.zcool.cn/large/2187570671.jpg" },
-                    { "english": "milk", "image": "https://img2.baidu.com/it/u=1994676893,3470999395&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400" },
-                    { "english": "banana", "image": "https://imgs.aixifan.com/newUpload/76686298_fa9cd63763e343a7a7b528f5561e4f7d.jpeg?w=400&h=400" },
-                    { "english": "ice cream", "image": "https://c-ssl.dtstatic.com/uploads/item/201608/10/20160810211351_SrMya.thumb.400_0.jpeg?w=400&h=400" },
-                    { "english": "yogurt", "image": "https://img0.baidu.com/it/u=2495496820,879090403&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400" },
-                    { "english": "juice", "image": "https://gd-hbimg.huaban.com/fb58bc702448790dee658b2d2ee27289466287f7e87f-MNVSMg_fw658?w=400&h=400" },
-                    { "english": "strawberry", "image": "https://img2.baidu.com/it/u=3200629007,96506358&fm=253&fmt=auto&app=138&f=JPEG?w=400&h=400" },
-                    { "english": "bread", "image": "https://imgservice.suning.cn/uimg1/b2c/image/l4PtvBZNnrJ9faWykSAPhA.jpg_800w_800h_4e?w=400&h=400" },
-                    { "english": "potato", "image": "https://img0.baidu.com/it/u=2814997083,1919246651&fm=253&fmt=auto&app=138&f=PNG?w=400&h=400" },
-                    { "english": "orange", "image": "https://www.i1766.com/zb_users/upload/2022/12/202212061670310614443963.jpg?w=400&h=400" },
-                    { "english": "coffee", "image": "https://qcloud.dpfile.com/pc/7ZNMjG0HKqPBp06bSA5lVaZnfa4xWFR9DiRHS27HQFgSOKdENvCT5IYH0G2v-PZo.jpg?w=400&h=400" }
-                ]);
+                loadNextWord();
             }, 2000);
         }
         
@@ -408,12 +395,16 @@
         playBtn.addEventListener('click', playPronunciation);
         restartBtn.addEventListener('click', initGame);
         backBtn.addEventListener('click', () => {
-            // 返回上一页，如果没有上一页则跳转到首页
+            // 返回上一页，如果没有上一页则跳转到wordcards.html
             if (history.length > 1) {
                 history.back();
             } else {
-                window.location.href = 'index.html'; // 假设首页是index.html
+                window.location.href = 'wordcards.html';
             }
+        });
+        // 新增的返回按钮事件
+        goBackBtn.addEventListener('click', () => {
+            window.location.href = 'wordcards.html';
         });
         
         // 初始化游戏
