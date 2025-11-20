@@ -1,4 +1,64 @@
-[
+[    
+    {
+        "hanzi": "男",
+        "pinyin": "nán",
+        "meaning": "Meaning: Male, man",
+        "image": "image/male.jpg"
+    },
+    {
+        "hanzi": "女",
+        "pinyin": "nǚ",
+        "meaning": "Meaning: Female, woman",
+        "image": "mage/female.jpg"
+    },
+    {
+        "hanzi": "汽车",
+        "pinyin": "qìchē",
+        "meaning": "Meaning: Automobile, car",
+        "image": "mage/car.jpg"
+    },
+    {
+        "hanzi": "自行车",
+        "pinyin": "zìxíngchē",
+        "meaning": "Meaning: Bicycle, bike",
+        "image": "mage/bike.jpg"
+    },
+    {
+        "hanzi": "飞机",
+        "pinyin": "fēijī",
+        "meaning": "Meaning: Airplane, aeroplane",
+        "image": "mage/plane.jpg"
+    },
+    {
+        "hanzi": "钱",
+        "pinyin": "qián",
+        "meaning": "Meaning: Money, currency",
+        "image": "mage/money.jpg"
+    },
+    {
+        "hanzi": "服务员",
+        "pinyin": "fúwùyuán",
+        "meaning": "Meaning: Waiter, waitress, attendant",
+        "image": "mage/waiter.jpg"
+    },
+    {
+        "hanzi": "酒店",
+        "pinyin": "jiǔdiàn",
+        "meaning": "Meaning: Hotel",
+        "image": "mage/hotel.jpg"
+    },
+    {
+        "hanzi": "超市",
+        "pinyin": "chāoshì",
+        "meaning": "Meaning: Supermarket",
+        "image": "mage/supermarket.jpg"
+    },
+    {
+        "hanzi": "地图",
+        "pinyin": "dìtú",
+        "meaning": "Meaning: Map",
+        "image": "mage/map.jpg"
+    },
     {
         "hanzi": "男人",
         "pinyin": "nánrén",
