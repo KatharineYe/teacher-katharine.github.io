@@ -1,0 +1,38 @@
+[
+    {
+        "hanzi": "听",
+        "pinyin": "tīng",
+        "meaning": "Meaning: Listen, hear",
+        "image": "image/listen.jpg"
+    },
+    {
+        "hanzi": "说",
+        "pinyin": "shuō",
+        "meaning": "Meaning: Speak, say, talk",
+        "image": "image/speak.jpg"
+    },
+    {
+        "hanzi": "读",
+        "pinyin": "dú",
+        "meaning": "Meaning: Read",
+        "image": "image/read.jpg"
+    },
+    {
+        "hanzi": "写",
+        "pinyin": "xiě",
+        "meaning": "Meaning: Write",
+        "image": "image/write.jpg"
+    },
+    {
+        "hanzi": "买",
+        "pinyin": "mǎi",
+        "meaning": "Meaning: Buy, purchase",
+        "image": "image/buy.jpg"
+    },
+    {
+        "hanzi": "卖",
+        "pinyin": "mài",
+        "meaning": "Meaning: Sell",
+        "image": "image/sell.jpg"
+    }
+]
