@@ -147,9 +147,7 @@
         let currentWordData = null;
         let maleVoice = null; // 男性声音
         let vocabulary = [];  // 从JSON加载的词汇数据
-        let distractors = []; // 从JSON加载的迷惑项
         let dFile = 'data/words.json'; // 默认文件
-        const distractorsFile = 'data/distractors.json'; // 迷惑项JSON文件
         
         // 检测并获取最大序号的JSON文件
         async function getLatestWordFile() {
@@ -201,20 +199,14 @@
                 // 获取最新的词汇文件
                 dFile = await getLatestWordFile();
                 
-                // 并行加载词汇数据和迷惑项
-                const [vocabResponse, distractorsResponse] = await Promise.all([
-                    fetch(dFile),
-                    fetch(distractorsFile)
-                ]);
+                // 加载词汇数据
+                const vocabResponse = await fetch(dFile);
                 
                 if (!vocabResponse.ok) throw new Error('Failed to load vocabulary data');
-                if (!distractorsResponse.ok) throw new Error('Failed to load distractors data');
                 
                 vocabulary = await vocabResponse.json();
-                distractors = await distractorsResponse.json();
                 
                 if (!vocabulary || vocabulary.length === 0) throw new Error('No vocabulary data available');
-                if (!distractors || distractors.length === 0) throw new Error('No distractors data available');
                 
                 // 更新进度显示
                 progressEl.textContent = `0/${vocabulary.length}`;
@@ -285,11 +277,20 @@
                 image: currentWord.image
             }];
             
-            // 添加干扰项，确保不重复
-            while (options.length < 4 && distractors.length > 0) {
-                const randomDistractor = distractors[Math.floor(Math.random() * distractors.length)];
-                if (!options.some(opt => opt.english === randomDistractor.english)) {
-                    options.push(randomDistractor);
+            // 添加干扰项，从其他词汇中随机选择3个
+            const otherVocabulary = vocabulary.filter(word => word !== currentWord);
+            while (options.length < 4 && otherVocabulary.length > 0) {
+                const randomIndex = Math.floor(Math.random() * otherVocabulary.length);
+                const randomDistractor = otherVocabulary[randomIndex];
+                const distractorEnglish = randomDistractor.meaning.replace('Meaning: ', '').split(',')[0].trim();
+                
+                if (!options.some(opt => opt.english === distractorEnglish)) {
+                    options.push({
+                        english: distractorEnglish,
+                        image: randomDistractor.image
+                    });
+                    // 从候选池中移除已选择的干扰项
+                    otherVocabulary.splice(randomIndex, 1);
                 }
             }
             
@@ -302,7 +303,7 @@
                 button.className = 'w-full py-6 px-5 border-2 border-secondary/30 rounded-xl flex items-center gap-5 option-hover font-medium text-xl shadow-sm hover:shadow';
                 button.innerHTML = `
                     <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 border-accent1">
-                        <img src="${option.image}" alt="${option.english}" class="w-full h-full object-cover">
+                        <img src="${option.image || 'https://via.placeholder.com/100'}" alt="${option.english}" class="w-full h-full object-cover">
                     </div>
                     <span><i class="fa fa-circle-o text-secondary mr-2"></i>${option.english}</span>
                 `;
