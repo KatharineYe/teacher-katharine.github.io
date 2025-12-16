@@ -70,9 +70,44 @@
             25% { transform: rotate(-5deg); }
             75% { transform: rotate(5deg); }
         }
+        
+        @keyframes animate-run {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(-5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        @keyframes animate-slide {
+            0% { left: 0; }
+            100% { left: 100%; }
+        }
     </style>
 </head>
 <body class="cartoon-bg min-h-screen font-comic text-neutral flex flex-col items-center justify-start pt-4 pb-8 px-4">
+    <!-- 加载动画 -->
+    <div id="loadingScreen" class="fixed inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center z-50 cartoon-bg">
+        <div class="loading-container relative">
+            <!-- 卡通人物跑步动画 -->
+            <div class="runner w-24 h-24 bg-primary rounded-full flex items-center justify-center text-white text-4xl animate-run">
+                <i class="fa fa-user"></i>
+            </div>
+            <!-- 跑步轨迹 -->
+            <div class="track absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-2 bg-gray-300 rounded-full overflow-hidden">
+                <div class="track-line absolute top-0 left-0 h-full w-1/4 bg-secondary animate-slide"></div>
+            </div>
+        </div>
+        <!-- 加载文本 -->
+        <div class="mt-8 text-2xl font-bold text-primary animate-pulse">
+            Loading Fun Words...
+        </div>
+        <!-- 跳动的小点 -->
+        <div class="mt-4 flex gap-2">
+            <div class="w-4 h-4 bg-accent1 rounded-full animate-bounce" style="animation-delay: 0s"></div>
+            <div class="w-4 h-4 bg-accent2 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            <div class="w-4 h-4 bg-accent3 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+        </div>
+    </div>
     <!-- 游戏标题和返回按钮 -->
     <header class="w-full max-w-4xl text-center mb-4 bounce-in relative">
         <!-- 返回按钮 -->
@@ -188,6 +223,9 @@
         // 初始化游戏
         async function initGame() {
             try {
+                // 显示加载动画
+                document.getElementById('loadingScreen').classList.remove('hidden');
+                
                 // 重置游戏状态
                 score = 0;
                 currentWordIndex = 0;
@@ -218,9 +256,16 @@
                 // 加载第一个词语
                 loadNextWord();
                 
+                // 隐藏加载动画
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                }, 500);
+                
             } catch (error) {
                 console.error('Initialization error:', error);
                 alert('Failed to load game data: ' + error.message);
+                // 隐藏加载动画
+                document.getElementById('loadingScreen').classList.add('hidden');
             }
         }
         
