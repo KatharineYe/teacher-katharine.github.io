@@ -202,5 +202,71 @@
         "pinyin": "qiú",
         "meaning": "Meaning: Ball",
         "image": "https://img0.baidu.com/it/u=3115036495,2872395318&fm=253&fmt=auto&app=138&f=JPEG?w=300&h=300"
+    },
+    {
+        "hanzi": "辣椒",
+        "pinyin": "làjiāo",
+        "meaning": "Meaning: Chili",
+        "image": "image/chili.jpg"
+    },
+    {
+        "hanzi": "牛奶",
+        "pinyin": "niúnǎi",
+        "meaning": "Meaning: Milk",
+        "image": "image/milk.jpg"
+    },
+    {
+        "hanzi": "香蕉",
+        "pinyin": "xiāngjiāo",
+        "meaning": "Meaning: Banana",
+        "image": "image/banana.jpg"
+    },
+    {
+        "hanzi": "冰淇淋",
+        "pinyin": "bīngqílín",
+        "meaning": "Meaning: Ice cream",
+        "image": "image/ice.jpg"
+    },
+    {
+        "hanzi": "酸奶",
+        "pinyin": "suānnǎi",
+        "meaning": "Meaning: Yogurt",
+        "image": "image/yogurt.jpg"
+    },
+    {
+        "hanzi": "果汁",
+        "pinyin": "guǒzhī",
+        "meaning": "Meaning: Juice",
+        "image": "image/juice.jpg"
+    },
+    {
+        "hanzi": "草莓",
+        "pinyin": "cǎoméi",
+        "meaning": "Meaning: Strawberry",
+        "image": "image/strawberry.jpg"
+    },
+    {
+        "hanzi": "面包",
+        "pinyin": "miànbāo",
+        "meaning": "Meaning: Bread",
+        "image": "image/bread.jpg"
+    },
+    {
+        "hanzi": "土豆",
+        "pinyin": "tǔdòu",
+        "meaning": "Meaning: Potato",
+        "image": "image/potato.jpg"
+    },
+    {
+        "hanzi": "橙子",
+        "pinyin": "chéngzi",
+        "meaning": "Meaning: Orange",
+        "image": "image/orange.jpg"
+    },
+    {
+        "hanzi": "咖啡",
+        "pinyin": "kāfēi",
+        "meaning": "Meaning: Coffee",
+        "image": "image/coffee.jpg"
     }
 ]
