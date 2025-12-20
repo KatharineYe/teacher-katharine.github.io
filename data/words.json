@@ -1,32 +1,272 @@
-[
+[    
     {
-        "hanzi": "山",
-        "pinyin": "shān",
-        "meaning": "Meaning: A high land formation (e.g., mountain)",
-        "sound": "https://www.example.com/sounds/shan.mp3"
+        "hanzi": "男",
+        "pinyin": "nán",
+        "meaning": "Meaning: Male, man",
+        "image": "image/male.jpg"
+    },
+    {
+        "hanzi": "女",
+        "pinyin": "nǚ",
+        "meaning": "Meaning: Female, woman",
+        "image": "image/female.jpg"
+    },
+    {
+        "hanzi": "汽车",
+        "pinyin": "qìchē",
+        "meaning": "Meaning: Automobile, car",
+        "image": "image/car.jpg"
+    },
+    {
+        "hanzi": "自行车",
+        "pinyin": "zìxíngchē",
+        "meaning": "Meaning: Bicycle, bike",
+        "image": "image/bike.jpg"
+    },
+    {
+        "hanzi": "飞机",
+        "pinyin": "fēijī",
+        "meaning": "Meaning: Airplane, aeroplane",
+        "image": "image/plane.jpg"
+    },
+    {
+        "hanzi": "钱",
+        "pinyin": "qián",
+        "meaning": "Meaning: Money, currency",
+        "image": "image/money.jpg"
+    },
+    {
+        "hanzi": "服务员",
+        "pinyin": "fúwùyuán",
+        "meaning": "Meaning: Waiter, waitress, attendant",
+        "image": "image/waiter.jpg"
+    },
+    {
+        "hanzi": "酒店",
+        "pinyin": "jiǔdiàn",
+        "meaning": "Meaning: Hotel",
+        "image": "image/hotel.jpg"
+    },
+    {
+        "hanzi": "超市",
+        "pinyin": "chāoshì",
+        "meaning": "Meaning: Supermarket",
+        "image": "image/supermarket.jpg"
+    },
+    {
+        "hanzi": "地图",
+        "pinyin": "dìtú",
+        "meaning": "Meaning: Map",
+        "image": "image/map.jpg"
+    },
+    {
+        "hanzi": "男人",
+        "pinyin": "nánrén",
+        "meaning": "Meaning: Man",
+        "image": "image/man.jpg"
+    },
+    {
+        "hanzi": "女人",
+        "pinyin": "nǚrén",
+        "meaning": "Meaning: Woman",
+        "image": "image/woman.jpg"
+    },
+    {
+        "hanzi": "男孩",
+        "pinyin": "nánhái",
+        "meaning": "Meaning: Boy",
+        "image": "image/boy.jpg"
+    },
+    {
+        "hanzi": "女孩",
+        "pinyin": "nǚhái",
+        "meaning": "Meaning: Girl",
+        "image": "image/girl.jpg"
+    },
+    {
+        "hanzi": "刀子",
+        "pinyin": "dāozi",
+        "meaning": "Meaning: Knife",
+        "image": "image/knife.jpg"
+    },
+    {
+        "hanzi": "叉子",
+        "pinyin": "chāzi",
+        "meaning": "Meaning: Fork",
+        "image": "image/fork.jpg"
+    },
+    {
+        "hanzi": "勺子",
+        "pinyin": "sháozi",
+        "meaning": "Meaning: Spoon",
+        "image": "image/spoon.jpg"
+    },
+    {
+        "hanzi": "筷子",
+        "pinyin": "kuàizi",
+        "meaning": "Meaning: Chopsticks",
+        "image": "image/chopsticks.jpg"
+    },
+    {
+        "hanzi": "盘子",
+        "pinyin": "pánzi",
+        "meaning": "Meaning: Plate",
+        "image": "image/plate.jpg"
+    },
+    {
+        "hanzi": "杯子",
+        "pinyin": "bēizi",
+        "meaning": "Meaning: Cup, glass",
+        "image": "image/cup.jpg"
+    },
+    {
+        "hanzi": "听",
+        "pinyin": "tīng",
+        "meaning": "Meaning: Listen, hear",
+        "image": "image/hear.jpg"
+    },
+    {
+        "hanzi": "说",
+        "pinyin": "shuō",
+        "meaning": "Meaning: Speak, say, talk",
+        "image": "image/speak.jpg"
+    },
+    {
+        "hanzi": "读",
+        "pinyin": "dú",
+        "meaning": "Meaning: Read",
+        "image": "image/read.jpg"
+    },
+    {
+        "hanzi": "写",
+        "pinyin": "xiě",
+        "meaning": "Meaning: Write",
+        "image": "image/write.jpg"
+    },
+    {
+        "hanzi": "买",
+        "pinyin": "mǎi",
+        "meaning": "Meaning: Buy, purchase",
+        "image": "image/buy.jpg"
+    },
+    {
+        "hanzi": "卖",
+        "pinyin": "mài",
+        "meaning": "Meaning: Sell",
+        "image": "image/sell.jpg"
+    },
+    {
+        "hanzi": "苹果",
+        "pinyin": "píng guǒ",
+        "meaning": "Meaning: Apple",
+        "image": "https://img2.baidu.com/it/u=2117757563,1761627832&fm=253&fmt=auto&app=120&f=JPEG?w=300&h=300"
+    },
+    {
+        "hanzi": "狗",
+        "pinyin": "gǒu",
+        "meaning": "Meaning: Dog",
+        "image": "https://picsum.photos/id/237/200/200"
+    },
+    {
+        "hanzi": "花",
+        "pinyin": "huā",
+        "meaning": "Meaning: Flower",
+        "image": "https://picsum.photos/id/360/200/200"
+    },
+    {
+        "hanzi": "太阳",
+        "pinyin": "tài yáng",
+        "meaning": "Meaning: Sun",
+        "image": "https://txnews.zjol.com.cn/jiaoyutiandi/xueshengxiuchang/202509/W020250905312557976974.png"
+    },
+    {
+        "hanzi": "月亮",
+        "pinyin": "yuè liang",
+        "meaning": "Meaning: Moon",
+        "image": "https://img.tukuppt.com/png_preview/03/08/90/YLA5IaDPGi.jpg!/fw/780"
     },
     {
         "hanzi": "水",
         "pinyin": "shuǐ",
-        "meaning": "Meaning: A colorless, odorless liquid (e.g., river water)",
-        "sound": "https://www.example.com/sounds/shui.mp3"
+        "meaning": "Meaning: Water",
+        "image": "https://b0.bdstatic.com/ugc/vvoJmcSpq7FfN2vlIBaO6Qa42192c36666a6046abbf269571c81f7.jpg"
     },
     {
-        "hanzi": "日",
-        "pinyin": "rì",
-        "meaning": "Meaning: The sun (e.g., sunrise)",
-        "sound": "https://www.example.com/sounds/ri.mp3"
+        "hanzi": "书",
+        "pinyin": "shū",
+        "meaning": "Meaning: Book",
+        "image": "https://img.soogif.com/FXcllDAiQJHeX8nZCnYMfqIo9Hyc5jWt.png"
     },
     {
-        "hanzi": "月",
-        "pinyin": "yuè",
-        "meaning": "Meaning: The moon (e.g., full moon)",
-        "sound": "https://www.example.com/sounds/yue.mp3"
+        "hanzi": "球",
+        "pinyin": "qiú",
+        "meaning": "Meaning: Ball",
+        "image": "https://img0.baidu.com/it/u=3115036495,2872395318&fm=253&fmt=auto&app=138&f=JPEG?w=300&h=300"
     },
     {
-        "hanzi": "人",
-        "pinyin": "rén",
-        "meaning": "Meaning: A human being (e.g., person)",
-        "sound": "https://www.example.com/sounds/ren.mp3"
+        "hanzi": "辣椒",
+        "pinyin": "làjiāo",
+        "meaning": "Meaning: Chili",
+        "image": "image/chili.jpg"
+    },
+    {
+        "hanzi": "牛奶",
+        "pinyin": "niúnǎi",
+        "meaning": "Meaning: Milk",
+        "image": "image/milk.jpg"
+    },
+    {
+        "hanzi": "香蕉",
+        "pinyin": "xiāngjiāo",
+        "meaning": "Meaning: Banana",
+        "image": "image/banana.jpg"
+    },
+    {
+        "hanzi": "冰淇淋",
+        "pinyin": "bīngqílín",
+        "meaning": "Meaning: Ice cream",
+        "image": "image/ice.jpg"
+    },
+    {
+        "hanzi": "酸奶",
+        "pinyin": "suānnǎi",
+        "meaning": "Meaning: Yogurt",
+        "image": "image/yogurt.jpg"
+    },
+    {
+        "hanzi": "果汁",
+        "pinyin": "guǒzhī",
+        "meaning": "Meaning: Juice",
+        "image": "image/juice.jpg"
+    },
+    {
+        "hanzi": "草莓",
+        "pinyin": "cǎoméi",
+        "meaning": "Meaning: Strawberry",
+        "image": "image/strawberry.jpg"
+    },
+    {
+        "hanzi": "面包",
+        "pinyin": "miànbāo",
+        "meaning": "Meaning: Bread",
+        "image": "image/bread.jpg"
+    },
+    {
+        "hanzi": "土豆",
+        "pinyin": "tǔdòu",
+        "meaning": "Meaning: Potato",
+        "image": "image/potato.jpg"
+    },
+    {
+        "hanzi": "橙子",
+        "pinyin": "chéngzi",
+        "meaning": "Meaning: Orange",
+        "image": "image/orange.jpg"
+    },
+    {
+        "hanzi": "咖啡",
+        "pinyin": "kāfēi",
+        "meaning": "Meaning: Coffee",
+        "image": "image/coffee.jpg"
     }
 ]

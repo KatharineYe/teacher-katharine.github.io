@@ -108,6 +108,47 @@
             <div class="w-4 h-4 bg-accent3 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
         </div>
     </div>
+    <!-- 词汇选择界面 -->
+    <div id="wordSelectionScreen" class="fixed inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center z-50 cartoon-bg">
+        <div class="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border-4 border-gradient-to-r from-accent2 to-secondary bounce-in">
+            <h2 class="text-2xl font-bold text-primary text-center mb-6">
+                <i class="fa fa-book text-accent1 animate-pulse"></i>
+                Choose Word Source
+            </h2>
+            
+            <div class="space-y-4">
+                <!-- 最新单词选项 -->
+                <button id="latestWordsBtn" class="w-full bg-gradient-to-r from-primary to-accent3 hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 text-lg flex items-center gap-3 option-hover">
+                    <i class="fa fa-star text-accent1 text-2xl"></i>
+                    <div class="text-left">
+                        <div class="font-bold">Review New Words</div>
+                    </div>
+                </button>
+                
+                <!-- 以前的单词选项 -->
+                <button id="oldWordsBtn" class="w-full bg-gradient-to-r from-secondary to-accent2 hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 text-lg flex items-center gap-3 option-hover">
+                    <i class="fa fa-history text-accent1 text-2xl"></i>
+                    <div class="text-left">
+                        <div class="font-bold">Review Previous Words</div>
+                    </div>
+                </button>
+                
+                <!-- 合并单词选项 -->
+                <button id="combinedWordsBtn" class="w-full bg-gradient-to-r from-accent4 to-accent3 hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 text-lg flex items-center gap-3 option-hover">
+                    <i class="fa fa-union text-accent1 text-2xl"></i>
+                    <div class="text-left">
+                        <div class="font-bold">Review All Words</div>
+                    </div>
+                </button>
+            </div>
+            
+            <!-- 返回按钮 -->
+            <button id="selectionBackBtn" class="mt-6 w-full bg-neutral hover:bg-neutral/80 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all duration-300 text-lg">
+                <i class="fa fa-arrow-left mr-2"></i>Back to Menu
+            </button>
+        </div>
+    </div>
+    
     <!-- 游戏标题和返回按钮 -->
     <header class="w-full max-w-4xl text-center mb-4 bounce-in relative">
         <!-- 返回按钮 -->
@@ -223,9 +264,6 @@
         // 初始化游戏
         async function initGame() {
             try {
-                // 显示加载动画
-                document.getElementById('loadingScreen').classList.remove('hidden');
-                
                 // 重置游戏状态
                 score = 0;
                 currentWordIndex = 0;
@@ -234,24 +272,87 @@
                 gameOverModal.classList.add('hidden');
                 optionsEl.innerHTML = '';
                 
-                // 获取最新的词汇文件
-                dFile = await getLatestWordFile();
+                // 更新进度显示为0/0
+                progressEl.textContent = '0/0';
+                finalScoreEl.textContent = '0/0';
                 
-                // 加载词汇数据
-                const vocabResponse = await fetch(dFile);
+                // 准备语音（优先选择男性声音）
+                prepareMaleVoice();
                 
-                if (!vocabResponse.ok) throw new Error('Failed to load vocabulary data');
+                // 显示词汇选择界面
+                document.getElementById('wordSelectionScreen').classList.remove('hidden');
                 
-                vocabulary = await vocabResponse.json();
+            } catch (error) {
+                console.error('Initialization error:', error);
+                alert('Failed to initialize game: ' + error.message);
+            }
+        }
+        
+        // 加载特定来源的词汇
+        async function loadWordSource(sourceType) {
+            try {
+                // 显示加载动画
+                document.getElementById('loadingScreen').classList.remove('hidden');
+                document.getElementById('wordSelectionScreen').classList.add('hidden');
+                
+                // 重置词汇数据
+                vocabulary = [];
+                
+                switch(sourceType) {
+                    case 'latest':
+                        // 加载最新的词汇文件
+                        const latestFile = await getLatestWordFile();
+                        const latestResponse = await fetch(latestFile);
+                        if (!latestResponse.ok) throw new Error('Failed to load latest vocabulary');
+                        vocabulary = await latestResponse.json();
+                        break;
+                        
+                    case 'old':
+                        // 加载以前的单词（words.json）
+                        const oldResponse = await fetch('data/words.json');
+                        if (!oldResponse.ok) throw new Error('Failed to load previous vocabulary');
+                        vocabulary = await oldResponse.json();
+                        break;
+                        
+                    case 'combined':
+                        // 加载最新和以前的单词并合并
+                        const combinedLatestFile = await getLatestWordFile();
+                        const combinedLatestResponse = await fetch(combinedLatestFile);
+                        const combinedOldResponse = await fetch('data/words.json');
+                        
+                        if (!combinedLatestResponse.ok) throw new Error('Failed to load latest vocabulary');
+                        if (!combinedOldResponse.ok) throw new Error('Failed to load previous vocabulary');
+                        
+                        const latestWords = await combinedLatestResponse.json();
+                        const oldWords = await combinedOldResponse.json();
+                        
+                        // 合并词汇数据，避免重复（根据hanzi字段去重）
+                        const wordMap = new Map();
+                        
+                        // 先添加以前的单词
+                        oldWords.forEach(word => {
+                            if (word.hanzi) {
+                                wordMap.set(word.hanzi, word);
+                            }
+                        });
+                        
+                        // 再添加最新的单词（覆盖重复的）
+                        latestWords.forEach(word => {
+                            if (word.hanzi) {
+                                wordMap.set(word.hanzi, word);
+                            }
+                        });
+                        
+                        // 将Map转换为数组
+                        vocabulary = Array.from(wordMap.values());
+                        break;
+                }
                 
                 if (!vocabulary || vocabulary.length === 0) throw new Error('No vocabulary data available');
                 
                 // 更新进度显示
                 progressEl.textContent = `0/${vocabulary.length}`;
                 finalScoreEl.textContent = `0/${vocabulary.length}`;
-                
-                // 准备语音（优先选择男性声音）
-                prepareMaleVoice();
                 
                 // 加载第一个词语
                 loadNextWord();
@@ -262,10 +363,11 @@
                 }, 500);
                 
             } catch (error) {
-                console.error('Initialization error:', error);
-                alert('Failed to load game data: ' + error.message);
-                // 隐藏加载动画
+                console.error('Error loading word source:', error);
+                alert('Failed to load vocabulary: ' + error.message);
+                // 隐藏加载动画，重新显示选择界面
                 document.getElementById('loadingScreen').classList.add('hidden');
+                document.getElementById('wordSelectionScreen').classList.remove('hidden');
             }
         }
         
@@ -478,6 +580,24 @@
         });
         // 新增的返回按钮事件
         goBackBtn.addEventListener('click', () => {
+            window.location.href = 'wordcards.html';
+        });
+        
+        // 词汇选择按钮事件监听器
+        document.getElementById('latestWordsBtn').addEventListener('click', () => {
+            loadWordSource('latest');
+        });
+        
+        document.getElementById('oldWordsBtn').addEventListener('click', () => {
+            loadWordSource('old');
+        });
+        
+        document.getElementById('combinedWordsBtn').addEventListener('click', () => {
+            loadWordSource('combined');
+        });
+        
+        // 词汇选择界面返回按钮事件
+        document.getElementById('selectionBackBtn').addEventListener('click', () => {
             window.location.href = 'wordcards.html';
         });
         
