@@ -1,4 +1,4 @@
-[    
+[
     {
         "hanzi": "男",
         "pinyin": "nán",
@@ -73,49 +73,49 @@
     },
     {
         "hanzi": "男孩",
-        "pinyin": "nánhái",
+        "pinyin": "nán hái",
         "meaning": "Meaning: Boy",
         "image": "image/boy.jpg"
     },
     {
         "hanzi": "女孩",
-        "pinyin": "nǚhái",
+        "pinyin": "nǚ hái",
         "meaning": "Meaning: Girl",
         "image": "image/girl.jpg"
     },
     {
         "hanzi": "刀子",
-        "pinyin": "dāozi",
+        "pinyin": "dāo zi",
         "meaning": "Meaning: Knife",
         "image": "image/knife.jpg"
     },
     {
         "hanzi": "叉子",
-        "pinyin": "chāzi",
+        "pinyin": "chā zi",
         "meaning": "Meaning: Fork",
         "image": "image/fork.jpg"
     },
     {
         "hanzi": "勺子",
-        "pinyin": "sháozi",
+        "pinyin": "sháo zi",
         "meaning": "Meaning: Spoon",
         "image": "image/spoon.jpg"
     },
     {
         "hanzi": "筷子",
-        "pinyin": "kuàizi",
+        "pinyin": "kuài zi",
         "meaning": "Meaning: Chopsticks",
         "image": "image/chopsticks.jpg"
     },
     {
         "hanzi": "盘子",
-        "pinyin": "pánzi",
+        "pinyin": "pán zi",
         "meaning": "Meaning: Plate",
         "image": "image/plate.jpg"
     },
     {
         "hanzi": "杯子",
-        "pinyin": "bēizi",
+        "pinyin": "bēi zi",
         "meaning": "Meaning: Cup, glass",
         "image": "image/cup.jpg"
     },
@@ -205,68 +205,246 @@
     },
     {
         "hanzi": "辣椒",
-        "pinyin": "làjiāo",
+        "pinyin": "là jiāo",
         "meaning": "Meaning: Chili",
         "image": "image/chili.jpg"
     },
     {
         "hanzi": "牛奶",
-        "pinyin": "niúnǎi",
+        "pinyin": "niú nǎi",
         "meaning": "Meaning: Milk",
         "image": "image/milk.jpg"
     },
     {
         "hanzi": "香蕉",
-        "pinyin": "xiāngjiāo",
+        "pinyin": "xiāng jiāo",
         "meaning": "Meaning: Banana",
         "image": "image/banana.jpg"
     },
     {
         "hanzi": "冰淇淋",
-        "pinyin": "bīngqílín",
+        "pinyin": "bīng qí lín",
         "meaning": "Meaning: Ice cream",
         "image": "image/ice.jpg"
     },
     {
         "hanzi": "酸奶",
-        "pinyin": "suānnǎi",
+        "pinyin": "suān nǎi",
         "meaning": "Meaning: Yogurt",
         "image": "image/yogurt.jpg"
     },
     {
         "hanzi": "果汁",
-        "pinyin": "guǒzhī",
+        "pinyin": "guǒ zhī",
         "meaning": "Meaning: Juice",
         "image": "image/juice.jpg"
     },
     {
         "hanzi": "草莓",
-        "pinyin": "cǎoméi",
+        "pinyin": "cǎo méi",
         "meaning": "Meaning: Strawberry",
         "image": "image/strawberry.jpg"
     },
     {
         "hanzi": "面包",
-        "pinyin": "miànbāo",
+        "pinyin": "miàn bāo",
         "meaning": "Meaning: Bread",
         "image": "image/bread.jpg"
     },
     {
         "hanzi": "土豆",
-        "pinyin": "tǔdòu",
+        "pinyin": "tǔ dòu",
         "meaning": "Meaning: Potato",
         "image": "image/potato.jpg"
     },
     {
         "hanzi": "橙子",
-        "pinyin": "chéngzi",
+        "pinyin": "chéng zi",
         "meaning": "Meaning: Orange",
         "image": "image/orange.jpg"
     },
     {
         "hanzi": "咖啡",
-        "pinyin": "kāfēi",
+        "pinyin": "kā fēi",
         "meaning": "Meaning: Coffee",
         "image": "image/coffee.jpg"
+    },
+    {
+        "hanzi": "星期一",
+        "pinyin": "xīng qī yī",
+        "meaning": "Meaning: Monday",
+        "image": "image/monday_50x50.jpg"
+    },
+    {
+        "hanzi": "星期二",
+        "pinyin": "xīng qī èr",
+        "meaning": "Meaning: Tuesday",
+        "image": "image/tuesday_50x50.jpg"
+    },
+    {
+        "hanzi": "星期三",
+        "pinyin": "xīng qī sān",
+        "meaning": "Meaning: Wednesday",
+        "image": "image/wednesday_50x50.jpg"
+    },
+    {
+        "hanzi": "星期四",
+        "pinyin": "xīng qī sì",
+        "meaning": "Meaning: Thursday",
+        "image": "image/thursday_50x50.jpg"
+    },
+    {
+        "hanzi": "星期五",
+        "pinyin": "xīng qī wǔ",
+        "meaning": "Meaning: Friday",
+        "image": "image/friday_50x50.jpg"
+    },
+    {
+        "hanzi": "星期六",
+        "pinyin": "xīng qī liù",
+        "meaning": "Meaning: Saturday",
+        "image": "image/saturday_50x50.jpg"
+    },
+    {
+        "hanzi": "星期日",
+        "pinyin": "xīng qī rì",
+        "meaning": "Meaning: Sunday",
+        "image": "image/sunday_50x50.jpg"
+    },
+    {
+        "hanzi": "红色",
+        "pinyin": "hóng sè",
+        "meaning": "Meaning: Red",
+        "image": "image/red_50x50.jpg"
+    },
+    {
+        "hanzi": "黄色",
+        "pinyin": "huáng sè",
+        "meaning": "Meaning: Yellow",
+        "image": "image/yellow_50x50.jpg"
+    },
+    {
+        "hanzi": "蓝色",
+        "pinyin": "lán sè",
+        "meaning": "Meaning: Blue",
+        "image": "image/blue_50x50.jpg"
+    },
+    {
+        "hanzi": "绿色",
+        "pinyin": "lǜ sè",
+        "meaning": "Meaning: Green",
+        "image": "image/green_50x50.jpg"
+    },
+    {
+        "hanzi": "紫色",
+        "pinyin": "zǐ sè",
+        "meaning": "Meaning: Purple",
+        "image": "image/purple_50x50.jpg"
+    },
+    {
+        "hanzi": "黑色",
+        "pinyin": "hēi sè",
+        "meaning": "Meaning: Black",
+        "image": "image/black_50x50.jpg"
+    },
+    {
+        "hanzi": "白色",
+        "pinyin": "bái sè",
+        "meaning": "Meaning: White",
+        "image": "image/white_50x50.jpg"
+    },
+    {
+        "hanzi": "灰色",
+        "pinyin": "huī sè",
+        "meaning": "Meaning: Gray",
+        "image": "image/gray_50x50.jpg"
+    },
+    {
+        "hanzi": "粉色",
+        "pinyin": "fěn sè",
+        "meaning": "Meaning: Pink",
+        "image": "image/pink_50x50.jpg"
+    },
+    {
+        "hanzi": "你好",
+        "pinyin": "nǐ hǎo",
+        "meaning": "Meaning: Hello"
+    },
+    {
+        "hanzi": "再见",
+        "pinyin": "zài jiàn",
+        "meaning": "Meaning: Goodbye"
+    },
+    {
+        "hanzi": "圣诞节",
+        "pinyin": "shèng dàn jié",
+        "meaning": "Meaning: Christmas",
+        "image": "image/Christmas.jpg"
+    },
+    {
+        "hanzi": "圣诞节快乐",
+        "pinyin": "shèng dàn jié kuài lè",
+        "meaning": "Meaning: Merry Christmas",
+        "image": "image/merry_christmas.jpg"
+    },
+    {
+        "hanzi": "圣诞帽",
+        "pinyin": "shèng dàn mào",
+        "meaning": "Meaning: Christmas hat",
+        "image": "image/Christmas_hat.jpg"
+    },
+    {
+        "hanzi": "长袜",
+        "pinyin": "cháng wà",
+        "meaning": "Meaning: Stocking",
+        "image": "image/stocking.jpg"
+    },
+    {
+        "hanzi": "铃铛",
+        "pinyin": "líng dāng",
+        "meaning": "Meaning: Bell",
+        "image": "image/bell.jpg"
+    },
+    {
+        "hanzi": "星星",
+        "pinyin": "xīng xīng",
+        "meaning": "Meaning: Star",
+        "image": "image/star.jpg"
+    },
+    {
+        "hanzi": "花环",
+        "pinyin": "huā huán",
+        "meaning": "Meaning: Wreath",
+        "image": "image/wreath.jpg"
+    },
+    {
+        "hanzi": "姜饼人",
+        "pinyin": "jiāng bǐng rén",
+        "meaning": "Meaning: Gingerbread man",
+        "image": "image/gingerbread.jpg"
+    },
+    {
+        "hanzi": "拐杖糖",
+        "pinyin": "guǎi zhàng táng",
+        "meaning": "Meaning: Candy cane",
+        "image": "image/candy.jpg"
+    },
+    {
+        "hanzi": "蜡烛",
+        "pinyin": "là zhú",
+        "meaning": "Meaning: Candle",
+        "image": "image/candle.jpg"
+    },
+    {
+        "hanzi": "雪橇",
+        "pinyin": "xuě qiāo",
+        "meaning": "Meaning: Sleigh",
+        "image": "image/sleigh.jpg"
+    },
+    {
+        "hanzi": "雪花",
+        "pinyin": "xuě huā",
+        "meaning": "Meaning: Snowflake",
+        "image": "image/snow.jpg"
     }
 ]
