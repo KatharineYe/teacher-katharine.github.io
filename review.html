@@ -82,30 +82,33 @@
             0% { left: 0; }
             100% { left: 100%; }
         }
+        
+        @keyframes animate-spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .animate-spin-slow {
+            animation: animate-spin-slow 2s linear infinite;
+        }
     </style>
 </head>
 <body class="cartoon-bg min-h-screen font-comic text-neutral flex flex-col items-center justify-start pt-4 pb-8 px-4">
     <!-- 加载动画 -->
-    <div id="loadingScreen" class="fixed inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center z-50 cartoon-bg">
-        <div class="loading-container relative">
-            <!-- 卡通人物跑步动画 -->
-            <div class="runner w-24 h-24 bg-primary rounded-full flex items-center justify-center text-white text-4xl animate-run">
-                <i class="fa fa-user"></i>
+    <div id="loadingScreen" class="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+        <div class="flex flex-col items-center">
+            <!-- 卡通旋转加载动画 -->
+            <div class="w-24 h-24 bg-gradient-to-r from-primary to-accent1 rounded-full flex items-center justify-center animate-spin-slow shadow-lg">
+                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-secondary to-accent2 rounded-full flex items-center justify-center">
+                        <i class="fa fa-smile-o text-white text-4xl animate-bounce"></i>
+                    </div>
+                </div>
             </div>
-            <!-- 跑步轨迹 -->
-            <div class="track absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-2 bg-gray-300 rounded-full overflow-hidden">
-                <div class="track-line absolute top-0 left-0 h-full w-1/4 bg-secondary animate-slide"></div>
+            <!-- 加载文本 -->
+            <div class="mt-6 text-xl font-bold text-primary animate-pulse">
+                Loading...
             </div>
-        </div>
-        <!-- 加载文本 -->
-        <div class="mt-8 text-2xl font-bold text-primary animate-pulse">
-            Loading Fun Words...
-        </div>
-        <!-- 跳动的小点 -->
-        <div class="mt-4 flex gap-2">
-            <div class="w-4 h-4 bg-accent1 rounded-full animate-bounce" style="animation-delay: 0s"></div>
-            <div class="w-4 h-4 bg-accent2 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-            <div class="w-4 h-4 bg-accent3 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
         </div>
     </div>
     <!-- 词汇选择界面 -->
@@ -182,7 +185,7 @@
         <div class="bg-white rounded-3xl p-6 shadow-lg border-4 border-gradient-to-r from-accent2 to-secondary">
             <!-- 使用flex容器将播放按钮和文本放在同一行 -->
             <div class="flex items-center justify-between gap-4 mb-6">
-                <button id="playBtn" class="bg-gradient-to-r from-primary to-accent3 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 text-lg wiggle">
+                <button id="playBtn" class="bg-gradient-to-r from-primary to-accent3 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 text-lg wiggle w-[140px] justify-center">
                     <i class="fa fa-play-circle"></i>
                     <span>Play</span>
                 </button>
@@ -225,29 +228,41 @@
         let vocabulary = [];  // 从JSON加载的词汇数据
         let dFile = 'data/words.json'; // 默认文件
         
-        // 检测并获取最大序号的JSON文件
+        // 检测并获取最新的词汇文件
         async function getLatestWordFile() {
-            // 可能的序号范围，可根据实际情况调整
-            const maxPossibleNumber = 100;
-            let latestNumber = 0;
+            // 先尝试检查是否存在固定命名的最新文件
+            const latestFile = 'data/words_latest.json';
+            try {
+                const response = await fetch(latestFile, { method: 'HEAD' });
+                if (response.ok) {
+                    return latestFile;
+                }
+            } catch (err) {
+                // 文件不存在时的错误忽略
+            }
             
-            // 从大到小检查文件是否存在
-            for (let i = maxPossibleNumber; i >= 1; i--) {
+            // 如果没有固定命名的最新文件，检查带序号的文件（从1开始向上检查）
+            let i = 1;
+            let latestValidFile = null;
+            
+            while (i <= 10) { // 最多检查10个文件
                 const testFile = `data/words_${i}.json`;
                 try {
                     const response = await fetch(testFile, { method: 'HEAD' });
                     if (response.ok) {
-                        latestNumber = i;
-                        break; // 找到最大的序号就退出循环
+                        latestValidFile = testFile;
+                        i++;
+                    } else {
+                        break; // 一旦找到不存在的文件，就停止检查
                     }
                 } catch (err) {
                     // 文件不存在时的错误忽略
-                    continue;
+                    break;
                 }
             }
             
-            // 返回最新的文件路径
-            return latestNumber > 0 ? `data/words_${latestNumber}.json` : 'data/words.json';
+            // 返回找到的最新文件或默认文件
+            return latestValidFile || 'data/words.json';
         }
         
         // DOM元素
@@ -394,21 +409,84 @@
                 return;
             }
             
-            // 随机选择一个未使用的词语
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * vocabulary.length);
-            } while (usedWords.includes(randomIndex));
+            // 显示加载动画
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.classList.remove('hidden');
+            }
             
-            usedWords.push(randomIndex);
-            currentWordData = vocabulary[randomIndex];
+            // 禁用play按钮
+            if (playBtn) {
+                playBtn.disabled = true;
+                playBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
             
-            // 生成选项（仅显示英文）
-            generateOptions(currentWordData);
-            
-            // 更新进度
-            currentWordIndex++;
-            progressEl.textContent = `${currentWordIndex}/${vocabulary.length}`;
+            // 延迟一下，让加载动画有时间显示
+            setTimeout(() => {
+                let reloadAttempts = 0;
+                const maxReloadAttempts = 3;
+                
+                function attemptLoad() {
+                    try {
+                        // 检查词汇数据是否可用
+                        if (!vocabulary || vocabulary.length === 0) {
+                            throw new Error('No vocabulary data available');
+                        }
+                        
+                        // 随机选择一个未使用的词语
+                        let randomIndex;
+                        do {
+                            randomIndex = Math.floor(Math.random() * vocabulary.length);
+                        } while (usedWords.includes(randomIndex));
+                        
+                        usedWords.push(randomIndex);
+                        currentWordData = vocabulary[randomIndex];
+                        
+                        // 生成选项（仅显示英文）
+                        generateOptions(currentWordData);
+                        
+                        // 更新进度
+                        currentWordIndex++;
+                        progressEl.textContent = `${currentWordIndex}/${vocabulary.length}`;
+                        
+                        // 加载成功，隐藏加载动画并启用按钮
+                        completeLoading();
+                        return true;
+                    } catch (error) {
+                        console.error('Error loading next word:', error);
+                        reloadAttempts++;
+                        
+                        if (reloadAttempts <= maxReloadAttempts) {
+                            console.log(`Attempting to reload (${reloadAttempts}/${maxReloadAttempts})...`);
+                            // 尝试重新加载词汇数据
+                            setTimeout(attemptLoad, 500);
+                            return false;
+                        } else {
+                            console.error('Max reload attempts reached');
+                            // 达到最大重试次数，隐藏加载动画并启用按钮
+                            completeLoading();
+                            return false;
+                        }
+                    }
+                }
+                
+                // 完成加载的回调函数
+                function completeLoading() {
+                    // 隐藏加载动画
+                    if (loadingScreen) {
+                        loadingScreen.classList.add('hidden');
+                    }
+                    
+                    // 启用play按钮
+                    if (playBtn) {
+                        playBtn.disabled = false;
+                        playBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }
+                
+                // 开始加载
+                attemptLoad();
+            }, 300); // 300ms的延迟，让加载动画有时间显示
         }
         
         // 生成选项（增大尺寸的两列布局）
@@ -464,8 +542,14 @@
             const isCorrect = selectedOption === correctOption;
             const buttons = optionsEl.querySelectorAll('button');
             
-            // 禁用所有按钮
+            // 禁用所有选项按钮
             buttons.forEach(btn => btn.disabled = true);
+            
+            // 禁用play按钮
+            if (playBtn) {
+                playBtn.disabled = true;
+                playBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
             
             // 高亮显示正确和错误的选项
             buttons.forEach(btn => {
@@ -500,29 +584,132 @@
         
         // 播放男性语音（仅发音中文）
         function playPronunciation() {
-            if (!currentWordData) return;
+            // 检查play按钮是否被禁用
+            if (playBtn && playBtn.disabled) {
+                return; // 按钮被禁用时不执行
+            }
+            
+            if (!currentWordData) {
+                // 检查是否在词汇选择界面
+                const selectionScreen = document.getElementById('wordSelectionScreen');
+                if (selectionScreen && !selectionScreen.classList.contains('hidden')) {
+                    // 在选择界面，自动选择第一个词汇来源
+                    const latestWordsBtn = document.getElementById('latestWordsBtn');
+                    if (latestWordsBtn) {
+                        latestWordsBtn.click();
+                    }
+                } else {
+                    // 不在选择界面，尝试加载下一个单词
+                    loadNextWord();
+                    // 不需要延迟，因为loadNextWord会处理加载过程
+                }
+                return;
+            }
+            
+            // 找到按钮内的span元素
+            const playBtnSpan = playBtn ? playBtn.querySelector('span') : null;
+            const originalText = playBtnSpan ? playBtnSpan.textContent : '';
+            
+            // 禁用play按钮并显示Playing状态
+            if (playBtn) {
+                playBtn.disabled = true;
+                playBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            
+            // 修改span文本内容
+            if (playBtnSpan) {
+                playBtnSpan.textContent = 'Playing...';
+            }
             
             // 停止任何正在播放的语音
             window.speechSynthesis.cancel();
             
-            // 创建语音实例
-            const utterance = new SpeechSynthesisUtterance(currentWordData.hanzi);
-            utterance.lang = 'zh-CN';
-            
-            // 设置男性声音参数
-            if (maleVoice) {
-                utterance.voice = maleVoice;
+            // 检查语音合成引擎是否就绪
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                // 语音引擎未就绪，等待就绪后再播放
+                const checkVoices = () => {
+                    const updatedVoices = window.speechSynthesis.getVoices();
+                    if (updatedVoices.length > 0) {
+                        // 语音引擎就绪，开始播放
+                        startSpeech();
+                    } else {
+                        // 继续检查
+                        setTimeout(checkVoices, 100);
+                    }
+                };
+                checkVoices();
+            } else {
+                // 语音引擎已就绪，直接播放
+                startSpeech();
             }
-            utterance.rate = 0.8; // 稍慢的语速
-            utterance.pitch = 0.8; // 较低的音调
-            utterance.volume = 1; // 最大音量
             
-            // 播放语音
-            window.speechSynthesis.speak(utterance);
-            
-            // 按钮动画效果
-            playBtn.classList.add('scale-95');
-            setTimeout(() => playBtn.classList.remove('scale-95'), 200);
+            // 开始播放语音
+            function startSpeech() {
+                try {
+                    // 创建语音实例
+                    const utterance = new SpeechSynthesisUtterance(currentWordData.hanzi);
+                    utterance.lang = 'zh-CN';
+                    
+                    // 设置男性声音参数
+                    if (maleVoice) {
+                        utterance.voice = maleVoice;
+                    }
+                    utterance.rate = 0.8; // 稍慢的语速
+                    utterance.pitch = 0.8; // 较低的音调
+                    utterance.volume = 1; // 最大音量
+                    
+                    // 播放结束事件
+                    utterance.onend = function() {
+                        // 恢复play按钮
+                        if (playBtn) {
+                            playBtn.disabled = false;
+                            playBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        }
+                        
+                        // 恢复span文本内容
+                        if (playBtnSpan) {
+                            playBtnSpan.textContent = originalText;
+                        }
+                    };
+                    
+                    // 播放错误事件
+                    utterance.onerror = function() {
+                        // 恢复play按钮
+                        if (playBtn) {
+                            playBtn.disabled = false;
+                            playBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        }
+                        
+                        // 恢复span文本内容
+                        if (playBtnSpan) {
+                            playBtnSpan.textContent = originalText;
+                        }
+                    };
+                    
+                    // 播放语音
+                    window.speechSynthesis.speak(utterance);
+                    
+                    // 按钮动画效果
+                    if (playBtn) {
+                        playBtn.classList.add('scale-95');
+                        setTimeout(() => playBtn.classList.remove('scale-95'), 200);
+                    }
+                } catch (error) {
+                    console.error('Error playing speech:', error);
+                    
+                    // 恢复play按钮
+                    if (playBtn) {
+                        playBtn.disabled = false;
+                        playBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                    
+                    // 恢复span文本内容
+                    if (playBtnSpan) {
+                        playBtnSpan.textContent = originalText;
+                    }
+                }
+            }
         }
         
         // 播放音效
