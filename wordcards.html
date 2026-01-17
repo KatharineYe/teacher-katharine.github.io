@@ -306,29 +306,41 @@
         const loadingIconEl = document.getElementById('loadingIcon');
         const progressEl = document.getElementById('progress');
 
-        // 检测并获取最大序号的JSON文件
+        // 检测并获取最新的词汇文件
         async function getLatestWordFile() {
-            // 可能的序号范围，可根据实际情况调整
-            const maxPossibleNumber = 100;
-            let latestNumber = 0;
+            // 先尝试检查是否存在固定命名的最新文件
+            const latestFile = 'data/words_latest.json';
+            try {
+                const response = await fetch(latestFile, { method: 'HEAD' });
+                if (response.ok) {
+                    return latestFile;
+                }
+            } catch (err) {
+                // 文件不存在时的错误忽略
+            }
             
-            // 从大到小检查文件是否存在
-            for (let i = maxPossibleNumber; i >= 1; i--) {
+            // 如果没有固定命名的最新文件，检查带序号的文件（从1开始向上检查）
+            let i = 1;
+            let latestValidFile = null;
+            
+            while (i <= 10) { // 最多检查10个文件
                 const testFile = `data/words_${i}.json`;
                 try {
                     const response = await fetch(testFile, { method: 'HEAD' });
                     if (response.ok) {
-                        latestNumber = i;
-                        break; // 找到最大的序号就退出循环
+                        latestValidFile = testFile;
+                        i++;
+                    } else {
+                        break; // 一旦找到不存在的文件，就停止检查
                     }
                 } catch (err) {
                     // 文件不存在时的错误忽略
-                    continue;
+                    break;
                 }
             }
             
-            // 返回最新的文件路径
-            return latestNumber > 0 ? `data/words_${latestNumber}.json` : 'data/words.json';
+            // 返回找到的最新文件或默认文件
+            return latestValidFile || 'data/words.json';
         }
 
         // 初始化：加载单词数据
