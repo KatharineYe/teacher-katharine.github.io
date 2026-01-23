@@ -128,6 +128,14 @@
                     </div>
                 </button>
                 
+                <!-- 困难模式选项 -->
+                <button id="hardWordsBtn" class="w-full bg-gradient-to-r from-accent4 to-accent3 hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 text-lg flex items-center gap-3 option-hover">
+                    <i class="fa fa-fire text-accent1 text-2xl"></i>
+                    <div class="text-left">
+                        <div class="font-bold">Review New Words_Hard</div>
+                    </div>
+                </button>
+                
                 <!-- 以前的单词选项 -->
                 <button id="oldWordsBtn" class="w-full bg-gradient-to-r from-secondary to-accent2 hover:opacity-90 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all duration-300 text-lg flex items-center gap-3 option-hover">
                     <i class="fa fa-history text-accent1 text-2xl"></i>
@@ -149,6 +157,33 @@
             <button id="selectionBackBtn" class="mt-6 w-full bg-neutral hover:bg-neutral/80 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all duration-300 text-lg">
                 <i class="fa fa-arrow-left mr-2"></i>Back to Menu
             </button>
+        </div>
+    </div>
+    
+    <!-- 单词数量选择对话框 -->
+    <div id="wordCountDialog" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-3xl p-8 shadow-2xl border-4 border-primary max-w-md w-full mx-4 bounce-in">
+            <h3 class="text-xl font-bold text-primary text-center mb-6">
+                <i class="fa fa-fire text-accent3 animate-pulse"></i>
+                Select Review Word Count
+            </h3>
+            
+            <div class="space-y-4">
+                <div class="text-left">
+                    <label class="block font-bold text-neutral mb-2">Number of previous words to review:</label>
+                    <input type="number" id="wordCountInput" min="0" value="5" oninput="if(parseInt(this.value) > parseInt(this.max)) this.value = this.max;" class="w-full px-4 py-3 border-2 border-secondary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-lg">
+                    <p class="text-sm text-gray-500 mt-1">Minimum: 0, Maximum: all words from words.json</p>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button id="cancelCountBtn" class="flex-1 bg-neutral hover:bg-neutral/80 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all duration-300 text-lg">
+                        <i class="fa fa-times mr-2"></i>Cancel
+                    </button>
+                    <button id="confirmCountBtn" class="flex-1 bg-gradient-to-r from-primary to-accent3 hover:opacity-90 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all duration-300 text-lg">
+                        <i class="fa fa-check mr-2"></i>Confirm
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -304,7 +339,7 @@
         }
         
         // 加载特定来源的词汇
-        async function loadWordSource(sourceType) {
+        async function loadWordSource(sourceType, reviewCount = 0) {
             try {
                 // 显示加载动画
                 document.getElementById('loadingScreen').classList.remove('hidden');
@@ -360,6 +395,36 @@
                         
                         // 将Map转换为数组
                         vocabulary = Array.from(wordMap.values());
+                        break;
+                        
+                    case 'hard':
+                        // 加载最新的词汇文件
+                        const hardLatestFile = await getLatestWordFile();
+                        const hardLatestResponse = await fetch(hardLatestFile);
+                        if (!hardLatestResponse.ok) throw new Error('Failed to load latest vocabulary');
+                        const hardLatestWords = await hardLatestResponse.json();
+                        
+                        // 加载以前的单词（words.json）
+                        const hardOldResponse = await fetch('data/words.json');
+                        if (!hardOldResponse.ok) throw new Error('Failed to load previous vocabulary');
+                        const hardOldWords = await hardOldResponse.json();
+                        
+                        // 从以前的单词中随机抽取指定数量的单词
+                        let selectedOldWords = [];
+                        if (reviewCount > 0 && hardOldWords.length > 0) {
+                            // 复制数组以避免修改原始数据
+                            const oldWordsCopy = [...hardOldWords];
+                            // 随机打乱数组
+                            for (let i = oldWordsCopy.length - 1; i > 0; i--) {
+                                const j = Math.floor(Math.random() * (i + 1));
+                                [oldWordsCopy[i], oldWordsCopy[j]] = [oldWordsCopy[j], oldWordsCopy[i]];
+                            }
+                            // 取前reviewCount个单词
+                            selectedOldWords = oldWordsCopy.slice(0, reviewCount);
+                        }
+                        
+                        // 合并最新单词和随机抽取的以前单词
+                        vocabulary = [...hardLatestWords, ...selectedOldWords];
                         break;
                 }
                 
@@ -781,6 +846,51 @@
         
         document.getElementById('combinedWordsBtn').addEventListener('click', () => {
             loadWordSource('combined');
+        });
+        
+        // 困难模式按钮事件监听器
+        document.getElementById('hardWordsBtn').addEventListener('click', async () => {
+            try {
+                // 加载words.json文件获取单词总数
+                const response = await fetch('data/words.json');
+                if (!response.ok) throw new Error('Failed to load words.json');
+                const words = await response.json();
+                const maxWordCount = words ? words.length : 0;
+                
+                // 更新输入框的最大值
+                const wordCountInput = document.getElementById('wordCountInput');
+                if (wordCountInput) {
+                    wordCountInput.max = maxWordCount;
+                }
+                
+                // 更新提示信息
+                const hintElement = document.querySelector('#wordCountDialog p.text-sm');
+                if (hintElement) {
+                    hintElement.textContent = `Minimum: 0, Maximum: ${maxWordCount} (all words from words.json)`;
+                }
+                
+                // 显示单词数量选择对话框
+                document.getElementById('wordCountDialog').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error loading word count:', error);
+                // 即使加载失败也显示对话框，使用默认值
+                document.getElementById('wordCountDialog').classList.remove('hidden');
+            }
+        });
+        
+        // 单词数量对话框事件监听器
+        document.getElementById('cancelCountBtn').addEventListener('click', () => {
+            document.getElementById('wordCountDialog').classList.add('hidden');
+        });
+        
+        document.getElementById('confirmCountBtn').addEventListener('click', () => {
+            const wordCountInput = document.getElementById('wordCountInput');
+            const inputValue = parseInt(wordCountInput.value) || 0;
+            const maxValue = parseInt(wordCountInput.max) || 0;
+            // 确保输入值不超过最大值
+            const wordCount = Math.min(inputValue, maxValue);
+            document.getElementById('wordCountDialog').classList.add('hidden');
+            loadWordSource('hard', wordCount);
         });
         
         // 词汇选择界面返回按钮事件
