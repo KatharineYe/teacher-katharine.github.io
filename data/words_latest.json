@@ -1,20 +1,50 @@
 [
     {
-        "hanzi": "新年好",
-        "pinyin": "xīn nián hǎo",
-        "meaning": "Meaning: Happy New Year",
-        "image": "image/happy_new_year.jpg"
+        "hanzi": "游乐场",
+        "pinyin": "yóu lè chǎng",
+        "meaning": "Meaning: Amusement park",
+        "image": "image/amusement_park.jpg"
     },
     {
-        "hanzi": "唱歌",
-        "pinyin": "chàng gē",
-        "meaning": "Meaning: Sing",
-        "image": "image/sing.jpg"
+        "hanzi": "滑梯",
+        "pinyin": "huá tī",
+        "meaning": "Meaning: Slide",
+        "image": "image/slide.jpg"
     },
     {
-        "hanzi": "跳舞",
-        "pinyin": "tiào wǔ",
-        "meaning": "Meaning: Dance",
-        "image": "image/dance.jpg"
+        "hanzi": "秋千",
+        "pinyin": "qiū qiān",
+        "meaning": "Meaning: Swing",
+        "image": "image/swing.jpg"
+    },
+    {
+        "hanzi": "跷跷板",
+        "pinyin": "qiāo qiāo bǎn",
+        "meaning": "Meaning: Seesaw",
+        "image": "image/seesaw.jpg"
+    },
+    {
+        "hanzi": "摇摇马",
+        "pinyin": "yáo yáo mǎ",
+        "meaning": "Meaning: Rocking horse",
+        "image": "image/rocking_horse.jpg"
+    },
+    {
+        "hanzi": "蹦床",
+        "pinyin": "bèng chuáng",
+        "meaning": "Meaning: Trampoline",
+        "image": "image/trampoline.jpg"
+    },
+    {
+        "hanzi": "旋转木马",
+        "pinyin": "xuán zhuǎn mù mǎ",
+        "meaning": "Meaning: Carousel, Merry-go-round",
+        "image": "image/wooden_horse.jpg"
+    },
+    {
+        "hanzi": "开心",
+        "pinyin": "kāi xīn",
+        "meaning": "Meaning: Happy",
+        "image": "image/happy.jpg"
     }
 ]

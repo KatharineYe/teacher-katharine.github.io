@@ -446,5 +446,23 @@
         "pinyin": "xuě huā",
         "meaning": "Meaning: Snowflake",
         "image": "image/snow.jpg"
+    },
+    {
+        "hanzi": "新年好",
+        "pinyin": "xīn nián hǎo",
+        "meaning": "Meaning: Happy New Year",
+        "image": "image/happy_new_year.jpg"
+    },
+    {
+        "hanzi": "唱歌",
+        "pinyin": "chàng gē",
+        "meaning": "Meaning: Sing",
+        "image": "image/sing.jpg"
+    },
+    {
+        "hanzi": "跳舞",
+        "pinyin": "tiào wǔ",
+        "meaning": "Meaning: Dance",
+        "image": "image/dance.jpg"
     }
 ]
