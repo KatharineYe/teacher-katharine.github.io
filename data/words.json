@@ -1,5 +1,35 @@
 [
     {
+        "hanzi": "爷爷",
+        "pinyin": "yé ye",
+        "meaning": "Meaning: Grandpa (father's father)"
+    },
+    {
+        "hanzi": "奶奶",
+        "pinyin": "nǎi nai",
+        "meaning": "Meaning: Grandma (father's mother)"
+    },
+    {
+        "hanzi": "伯伯",
+        "pinyin": "bó bo",
+        "meaning": "Meaning: Uncle (father's elder brother)"
+    },
+    {
+        "hanzi": "姑姑",
+        "pinyin": "gū gu",
+        "meaning": "Meaning: Aunt (father's sister)"
+    },
+    {
+        "hanzi": "外公",
+        "pinyin": "wài gōng",
+        "meaning": "Meaning: Grandpa (mother's father)"
+    },
+    {
+        "hanzi": "外婆",
+        "pinyin": "wài pó",
+        "meaning": "Meaning: Grandma (mother's mother)"
+    },
+    {
         "hanzi": "男",
         "pinyin": "nán",
         "meaning": "Meaning: Male, man",
