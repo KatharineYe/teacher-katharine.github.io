@@ -1,74 +1,62 @@
 [
     {
-        "hanzi": "蓝天",
-        "pinyin": "lán tiān",
-        "meaning": "Meaning: Blue sky",
-        "image": "image/sky_50x50.jpg"
+        "hanzi": "西游记",
+        "pinyin": "xī yóu jì",
+        "meaning": "Meaning: Journey to the West",
+        "image": "image/journeytothewest_50x50.jpg"
     },
     {
-        "hanzi": "白云",
-        "pinyin": "bái yún",
-        "meaning": "Meaning: White cloud",
-        "image": "image/cloud_50x50.jpg"
+        "hanzi": "胡萝卜",
+        "pinyin": "hú luó bo",
+        "meaning": "Meaning: Carrot",
+        "image": "image/carrot_50x50.jpg"
     },
     {
-        "hanzi": "彩虹",
-        "pinyin": "cǎi hóng",
-        "meaning": "Meaning: Rainbow",
-        "image": "image/Rainbow_50x50.jpg"
+        "hanzi": "坦克",
+        "pinyin": "tǎn kè",
+        "meaning": "Meaning: Tank",
+        "image": "image/tank_50x50.jpg"
     },
     {
-        "hanzi": "大树",
-        "pinyin": "dà shù",
-        "meaning": "Meaning: Big tree",
-        "image": "image/tree_50x50.jpg"
+        "hanzi": "汽车",
+        "pinyin": "qì chē",
+        "meaning": "Meaning: Car",
+        "image": "image/car_50x50.jpg"
     },
     {
-        "hanzi": "小草",
-        "pinyin": "xiǎo cǎo",
-        "meaning": "Meaning: Small grass",
-        "image": "image/grass_50x50.jpg"
+        "hanzi": "卡车",
+        "pinyin": "kǎ chē",
+        "meaning": "Meaning: Truck",
+        "image": "image/truck_50x50.jpg"
     },
     {
-        "hanzi": "森林",
-        "pinyin": "sēn lín",
-        "meaning": "Meaning: Forest",
-        "image": "image/Forest_50x50.jpg"
+        "hanzi": "飞机",
+        "pinyin": "fēi jī",
+        "meaning": "Meaning: Airplane",
+        "image": "image/airplane_50x50.jpg"
     },
     {
-        "hanzi": "山川",
-        "pinyin": "shān chuān",
-        "meaning": "Meaning: Mountains",
-        "image": "image/mountain_50x50.jpg"
+        "hanzi": "窗户",
+        "pinyin": "chuāng hù",
+        "meaning": "Meaning: Window",
+        "image": "image/window_50x50.jpg"
     },
     {
-        "hanzi": "大海",
-        "pinyin": "dà hǎi",
-        "meaning": "Meaning: Sea, ocean",
-        "image": "image/sea_50x50.jpg"
+        "hanzi": "火箭",
+        "pinyin": "huǒ jiàn",
+        "meaning": "Meaning: Rocket",
+        "image": "image/rocket_50x50.jpg"
     },
     {
-        "hanzi": "瀑布",
-        "pinyin": "pù bù",
-        "meaning": "Meaning: Waterfall",
-        "image": "image/waterfall_50x50.jpg"
+        "hanzi": "锦鲤",
+        "pinyin": "jǐn lǐ",
+        "meaning": "Meaning: Koi fish",
+        "image": "image/koifish_50x50.jpg"
     },
     {
-        "hanzi": "湖泊",
-        "pinyin": "hú pō",
-        "meaning": "Meaning: Lake",
-        "image": "image/lake_50x50.jpg"
-    },
-    {
-        "hanzi": "沙滩",
-        "pinyin": "shā tān",
-        "meaning": "Meaning: Beach",
-        "image": "image/beach_50x50.jpg"
-    },
-    {
-        "hanzi": "沙漠",
-        "pinyin": "shā mò",
-        "meaning": "Meaning: Desert",
-        "image": "image/desert_50x50.jpg"
+        "hanzi": "熊猫",
+        "pinyin": "xióng māo",
+        "meaning": "Meaning: Panda",
+        "image": "image/panda_50x50.jpg"
     }
 ]
