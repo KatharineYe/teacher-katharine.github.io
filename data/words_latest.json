@@ -1,5 +1,4 @@
 [
-    [
     {
         "hanzi": "唐僧",
         "pinyin": "táng sēng",
@@ -39,7 +38,7 @@
     {
         "hanzi": "白骨精",
         "pinyin": "bái gǔ jīng",
-        "meaning": "Meaning: White Bone Demon",
+        "meaning": "Meaning: Lady Whitebone",
         "image": "image/baigujing_50x50.jpg"
     },
     {
@@ -67,34 +66,9 @@
         "image": "image/yaoguai_50x50.jpg"
     },
     {
-        "hanzi": "菩提祖师",
-        "pinyin": "pú tí zǔ shī",
-        "meaning": "Meaning: Patriarch Bodhi",
-        "image": "image/putizushi_50x50.jpg"
-    },
-    {
         "hanzi": "紧箍咒",
         "pinyin": "jǐn gū zhòu",
         "meaning": "Meaning: Tight Fillet Spell",
         "image": "image/jinguzhou_50x50.jpg"
-    },
-    {
-        "hanzi": "筋斗云",
-        "pinyin": "jīn dǒu yún",
-        "meaning": "Meaning: Somersault Cloud",
-        "image": "image/jindouyun_50x50.jpg"
-    },
-    {
-        "hanzi": "蟠桃",
-        "pinyin": "pán táo",
-        "meaning": "Meaning: Peach of Immortality",
-        "image": "image/pantao_50x50.jpg"
-    },
-    {
-        "hanzi": "如来佛祖",
-        "pinyin": "rú lái fó zǔ",
-        "meaning": "Meaning: Tathagata Buddha",
-        "image": "image/rulaifozu_50x50.jpg"
     }
-]
 ]
